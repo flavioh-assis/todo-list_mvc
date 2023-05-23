@@ -16,7 +16,17 @@ body {
     margin-bottom: 3rem;
 }
 
-footer {
+.footer {
     align-items: center;
     height: 3rem !important;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.card-footer button {
+    border-radius: 4px;
+    font-size: 0.7rem;
 }
