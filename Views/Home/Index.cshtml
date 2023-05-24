@@ -1,29 +1,29 @@
 ﻿@using System.Globalization;
 @{
-    ViewData["Title"] = "Minhas Tarefas";
+    ViewData["Title"] = "Tarefas Pendentes";
 
     var task1 = new TaskModel
             {
                 Id = 1,
                 Title = "Camidia",
-                CreationDate = new DateTime(2023, 1, 1),
-                Completed = false,
-                Description = "Peito e bíceps."
+                CreatedAt = new DateTime(2023, 1, 1),
+                IsCompleted = false,
+                Description = "Peito e bíceps"
             };
     var task2 = new TaskModel
             {
                 Id = 2,
                 Title = "Trabaiá",
-                CreationDate = new DateTime(2023, 1, 2),
-                Completed = false,
-                Description = "Codar e codar."
+                CreatedAt = new DateTime(2023, 1, 2),
+                IsCompleted = false,
+                Description = "Codar e codar"
             };
 
     var tasks = new List<TaskModel> { task1, task2 };
 }
 
 <main class="text-center">
-    <h1 class="fs-4">Minhas Tarefas Pendentes</h1>
+    <h1 class="fs-4">Pendentes</h1>
 
     <div class="d-flex flex-column align-items-center gap-2">
         @foreach (var task in tasks)
@@ -36,17 +36,20 @@
                 <div class="card-body pt-2 pb-2">
                     <p class="card-text mb-1">@task.Description</p>
 
-                    <p class="fw-bold">Criado em: <span class="fw-normal">@task.CreationDate.ToString(new CultureInfo("pt-br"))</span></p>
+                    <p class="fw-bold">Criado em: <span class="fw-normal">@task.CreatedAt.ToString(new
+                        CultureInfo("pt-br"))</span></p>
 
-                    <p class="fw-bold">Status: <span class="fw-normal">@(@task.Completed ? "Concluída" : "Pendente")</span></p>
+                    <p class="fw-bold">Status: <span class="fw-normal">@(@task.IsCompleted ? "Concluída" :
+                        "Pendente")</span>
+                    </p>
                 </div>
 
                 <div class="card-footer d-flex justify-content-between">
-                    <button type="button" class="btn btn-success pb-0 pt-0 ps-2 pe-2">Concluir</button>
+                    <button class="btn btn-sm btn-success">Concluir</button>
 
-                    <button type="button" class="btn btn-primary pb-0 pt-0 ps-2 pe-2">Editar</button>
+                    <button class="btn btn-sm btn-primary">Editar</button>
 
-                    <button type="button" class="btn btn-danger pb-0 pt-0 ps-2 pe-2">Excluir</button>
+                    <button class="btn btn-sm btn-danger">Excluir</button>
                 </div>
             </div>
         }
