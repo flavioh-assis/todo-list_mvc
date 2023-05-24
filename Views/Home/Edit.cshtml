@@ -1,0 +1,45 @@
+@using System.Globalization;
+@{
+    ViewData["Title"] = "Alterar Tarefa";
+
+    var task = new TaskModel
+            {
+                Id = 1,
+                Title = "Estudar ASP.NET",
+                Description = "Estrutura e Razor pages",
+                IsCompleted = false,
+                CreatedAt = DateTime.Now,
+            };
+}
+
+<main>
+    <h1 class="fs-4 text-center">Alterar Tarefa</h1>
+
+    <div class="d-flex flex-column align-items-center gap-2">
+        <div class="mb-3">
+            <label for="id" class="form-label">Número</label>
+            <input class="form-control form-control-sm" id="id" value="@(task.Id)" disabled />
+        </div>
+
+        <div class="mb-3">
+            <label for="title" class="form-label">Título</label>
+            <input class="form-control form-control-sm" id="title" value="@(task.Title)" />
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Descrição</label>
+            <input class="form-control form-control-sm" id="description" value="@(task.Description)" />
+        </div>
+
+        <div class="mb-3">
+            <label for="created-at" class="form-label">Criado em</label>
+            <input class="form-control form-control-sm" id="created-at"
+                value="@(task.CreatedAt.ToString(new CultureInfo("pt-br")))" disabled />
+        </div>
+
+        <div class="d-flex text-center gap-2">
+            <button class="btn btn-outline-danger btn-sm">Cancelar</button>
+            <button class="btn btn-success btn-sm">Salvar</button>
+        </div>
+    </div>
+</main>
