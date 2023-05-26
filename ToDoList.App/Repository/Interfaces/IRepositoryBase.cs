@@ -1,6 +1,6 @@
-using ToDoList.Models;
+using ToDoList.App.Models;
 
-namespace ToDoList.Repository.Interfaces
+namespace ToDoList.App.Repository.Interfaces
 {
 	public interface IRepositoryBase<TEntity> where TEntity : Entity
 	{

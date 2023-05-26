@@ -1,4 +1,4 @@
-namespace ToDoList.Models
+namespace ToDoList.App.Models
 {
 	public class Entity
 	{

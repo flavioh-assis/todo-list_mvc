@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ToDoList.Data.Configuration;
-using ToDoList.Models;
+using ToDoList.App.Data.Configuration;
+using ToDoList.App.Models;
 
-namespace ToDoList.Data.Context
+namespace ToDoList.App.Data.Context
 {
 	public class TaskContext : DbContext
 	{

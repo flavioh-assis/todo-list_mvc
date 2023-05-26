@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ToDoList.Models;
+using ToDoList.App.Models;
 
-namespace ToDoList.Data.Configuration
+namespace ToDoList.App.Data.Configuration
 {
 	public class TaskConfiguration : IEntityTypeConfiguration<TaskModel>
 	{

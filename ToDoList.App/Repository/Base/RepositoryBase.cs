@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using ToDoList.Data.Context;
-using ToDoList.Models;
-using ToDoList.Repository.Interfaces;
+using ToDoList.App.Data.Context;
+using ToDoList.App.Models;
+using ToDoList.App.Repository.Interfaces;
 
-namespace ToDoList.Repository.Base
+namespace ToDoList.App.Repository.Base
 {
 	public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : Entity
 	{

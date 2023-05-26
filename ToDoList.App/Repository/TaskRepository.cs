@@ -1,9 +1,9 @@
-using ToDoList.Data.Context;
-using ToDoList.Models;
-using ToDoList.Repository.Base;
-using ToDoList.Repository.Interfaces;
+using ToDoList.App.Data.Context;
+using ToDoList.App.Models;
+using ToDoList.App.Repository.Base;
+using ToDoList.App.Repository.Interfaces;
 
-namespace ToDoList.Repository
+namespace ToDoList.App.Repository
 {
 	public class TaskRepository : RepositoryBase<TaskModel>, ITaskRepository
 	{
