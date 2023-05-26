@@ -7,16 +7,16 @@
                 Id = 1,
                 Title = "Estudar ASP.NET",
                 CreatedAt = new DateTime(2023, 2, 1),
-                IsCompleted = true,
-                Description = "Estrutura e Razor pages"
+                Description = "Estrutura e Razor pages",
+                CompletedAt = new DateTime(2023, 2, 3)
             };
     var task2 = new TaskModel
             {
                 Id = 2,
                 Title = "Estudar SQL",
                 CreatedAt = new DateTime(2023, 2, 2),
-                IsCompleted = true,
-                Description = "SELECT e JOIN"
+                Description = "SELECT e JOIN",
+                CompletedAt = new DateTime(2023, 2, 5)
             };
 
     var tasks = new List<TaskModel> { task1, task2 };
@@ -39,7 +39,7 @@
                     <p class="fw-bold">Criado em: <span class="fw-normal">@task.CreatedAt.ToString(new
                         CultureInfo("pt-br"))</span></p>
 
-                    <p class="fw-bold">Status: <span class="fw-normal">@(@task.IsCompleted ? "Concluída" :
+                    <p class="fw-bold">Status: <span class="fw-normal">@(@task.CompletedAt != null ? "Concluída" :
                         "Pendente")</span>
                     </p>
                 </div>

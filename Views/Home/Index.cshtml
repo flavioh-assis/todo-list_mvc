@@ -7,7 +7,6 @@
                 Id = 1,
                 Title = "Camidia",
                 CreatedAt = new DateTime(2023, 1, 1),
-                IsCompleted = false,
                 Description = "Peito e bíceps"
             };
     var task2 = new TaskModel
@@ -15,7 +14,6 @@
                 Id = 2,
                 Title = "Trabaiá",
                 CreatedAt = new DateTime(2023, 1, 2),
-                IsCompleted = false,
                 Description = "Codar e codar"
             };
 
@@ -39,7 +37,7 @@
                     <p class="fw-bold">Criado em: <span class="fw-normal">@task.CreatedAt.ToString(new
                         CultureInfo("pt-br"))</span></p>
 
-                    <p class="fw-bold">Status: <span class="fw-normal">@(@task.IsCompleted ? "Concluída" :
+                    <p class="fw-bold">Status: <span class="fw-normal">@(@task.CompletedAt != null ? "Concluída" :
                         "Pendente")</span>
                     </p>
                 </div>

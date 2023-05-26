@@ -5,21 +5,50 @@
 <main>
     <h1 class="fs-4 text-center">Nova Tarefa</h1>
 
-    <div class="d-flex flex-column align-items-center gap-2">
+    <form
+        method="post"
+        asp-controller="Home"
+        asp-action="Create"
+        class="d-flex flex-column align-items-center gap-2"
+    >
         <div class="mb-3">
-            <label for="title" class="form-label">Título</label>
-            <input type="title" class="form-control form-control-sm" id="title" placeholder="Estudar ASP.NET">
+            <label
+                for="title"
+                class="form-label"
+            >
+                Título
+            </label>
+            <input
+                name="title"
+                id="title"
+                placeholder="Estudar ASP.NET"
+                class="form-control form-control-sm"
+            />
         </div>
 
         <div class="mb-3">
-            <label for="description" class="form-label">Descrição</label>
-            <input type="description" class="form-control form-control-sm" id="description"
-                placeholder="Estrutura e Razor pages">
+            <label
+                for="description"
+                class="form-label"
+            >
+                Descrição
+            </label>
+            <input
+                name="description"
+                id="description"
+                placeholder="Estrutura e Razor pages"
+                class="form-control form-control-sm"
+            />
         </div>
 
         <div class="d-flex text-center gap-2">
             <button class="btn btn-sm btn-outline-danger">Cancelar</button>
-            <button class="btn btn-sm btn-success">Salvar</button>
+            <button
+                type="submit"
+                class="btn btn-success btn-sm"
+            >
+                Salvar
+            </button>
         </div>
-    </div>
+    </form>
 </main>
