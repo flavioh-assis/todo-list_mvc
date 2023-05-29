@@ -24,9 +24,13 @@ namespace ToDoList.App.Controllers
 
 			return View(pendingTasks);
 		}
-		public IActionResult Completed()
+
+		public async Task<IActionResult> CompletedAsync()
 		{
-			return View();
+			var allTasks = await _taskRepository.GetAll();
+			var completedTasks = allTasks.Select(x => x).Where(x => x.CompletedAt != null).ToList();
+
+			return View(completedTasks);
 		}
 
 		public IActionResult Create()
