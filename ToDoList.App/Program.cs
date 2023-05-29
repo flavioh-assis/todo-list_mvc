@@ -1,11 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using ToDoList.App.Data.Context;
+using ToDoList.App.Repository;
+using ToDoList.App.Repository.Base;
+using ToDoList.App.Repository.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<TaskContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddTransient<ITaskRepository, TaskRepository>();
 
 var app = builder.Build();
 
