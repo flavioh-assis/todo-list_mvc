@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using ToDoList.App.Models;
 using ToDoList.App.Repository.Interfaces;
+using ToDoList.App.ViewModels;
 
 namespace ToDoList.App.Controllers
 {
@@ -31,6 +32,16 @@ namespace ToDoList.App.Controllers
 		public IActionResult Create()
 		{
 			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Create(TaskViewModel model)
+		{
+			var newTask = new TaskModel { Title = model.Title, Description = model.Description };
+
+			await _taskRepository.Create(newTask);
+
+			return RedirectToAction("Index", "Home");
 		}
 
 		public IActionResult Edit()
