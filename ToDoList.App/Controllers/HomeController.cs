@@ -39,7 +39,7 @@ namespace ToDoList.App.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Create(TaskViewModel model)
+		public async Task<IActionResult> CreateAsync(TaskViewModel model)
 		{
 			var newTask = new TaskModel { Title = model.Title, Description = model.Description };
 
