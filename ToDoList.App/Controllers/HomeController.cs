@@ -19,11 +19,11 @@ namespace ToDoList.App.Controllers
 
 		public async Task<IActionResult> IndexAsync()
 		{
-			var tasks = await _taskRepository.GetAll();
+			var allTasks = await _taskRepository.GetAll();
+			var pendingTasks = allTasks.Select(x => x).Where(x => x.CompletedAt == null).ToList();
 
-			return View(tasks);
+			return View(pendingTasks);
 		}
-
 		public IActionResult Completed()
 		{
 			return View();
