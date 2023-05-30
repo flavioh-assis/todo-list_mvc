@@ -1,44 +1,43 @@
-@using System.Globalization;
+@model TaskModel
+
 @{
     ViewData["Title"] = "Alterar Tarefa";
 
-    var task = new TaskModel
-            {
-                Id = 1,
-                Title = "Estudar ASP.NET",
-                Description = "Estrutura e Razor pages",
-                CreatedAt = DateTime.Now,
-            };
+    var localDateCreated = Model.CreatedAt.ToLocalTime();
+    var dateCreated = localDateCreated.ToString("dd/MM/yyyy");
+    var timeCreated = localDateCreated.ToString("HH:mm");
+    var dateCreatedText = $"{dateCreated} às {timeCreated}";
 }
 
-<div>
+<form method="post" asp-controller="Home" asp-action="Update">
     <h1 class="fs-4 text-center">Alterar Tarefa</h1>
 
     <div class="d-flex flex-column align-items-center gap-2">
         <div class="mb-3">
             <label for="id" class="form-label">Número</label>
-            <input class="form-control form-control-sm" id="id" value="@(task.Id)" disabled />
+            <input name="id" id="id" value="@Model.Id" readonly
+                class="form-control form-control-sm no-focus-style disabled" />
         </div>
 
         <div class="mb-3">
             <label for="title" class="form-label">Título</label>
-            <input class="form-control form-control-sm" id="title" value="@(task.Title)" />
+            <input name="title" id="title" value="@Model.Title" class="form-control form-control-sm" />
         </div>
 
         <div class="mb-3">
             <label for="description" class="form-label">Descrição</label>
-            <input class="form-control form-control-sm" id="description" value="@(task.Description)" />
+            <input name="description" id="description" value="@Model.Description"
+                class="form-control form-control-sm" />
         </div>
 
         <div class="mb-3">
             <label for="created-at" class="form-label">Criado em</label>
-            <input class="form-control form-control-sm" id="created-at"
-                value="@(task.CreatedAt.ToString(new CultureInfo("pt-br")))" disabled />
+            <input id="created-at" value="@dateCreatedText" disabled class="form-control form-control-sm" />
         </div>
 
         <div class="d-flex text-center gap-2">
-            <button class="btn btn-outline-danger btn-sm">Cancelar</button>
-            <button class="btn btn-success btn-sm">Salvar</button>
+            <button type="button" class="btn btn-outline-danger btn-sm">Cancelar</button>
+            <button type="submit" class="btn btn-success btn-sm">Salvar</button>
         </div>
     </div>
-</div>
+</form>
