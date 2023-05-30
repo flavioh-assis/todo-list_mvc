@@ -33,6 +33,17 @@ namespace ToDoList.App.Controllers
 			return View(completedTasks);
 		}
 
+		[HttpPost]
+		public async Task<IActionResult> CompleteAsync(CompleteTaskViewModel model)
+		{
+			var task = await _taskRepository.GetById(model.Id);
+			task.CompletedAt = DateTime.UtcNow;
+
+			await _taskRepository.Update(task);
+
+			return RedirectToAction("Completed", "Home");
+		}
+
 		public IActionResult Create()
 		{
 			return View();
@@ -52,7 +63,6 @@ namespace ToDoList.App.Controllers
 		{
 			return View();
 		}
-
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
