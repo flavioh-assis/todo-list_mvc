@@ -11,6 +11,7 @@ html {
 }
 
 body {
+    /* background: #535353; */
     background: #f1f1f1;
     font-size: 62.5%;
     margin-bottom: 3rem;
@@ -24,4 +25,10 @@ p {
 .card-footer button {
     border-radius: 4px;
     font-size: 0.7rem;
+}
+
+.no-focus-style {    
+    border: 1px solid #ced4da !important;
+    box-shadow: none !important;
+    cursor: auto;
 }
