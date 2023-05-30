@@ -1,0 +1,41 @@
+@model TaskModel
+
+@{
+    var localDateCreated = Model.CreatedAt.ToLocalTime();
+    var dateCreated = localDateCreated.ToString("dd/MM/yyyy");
+    var timeCreated = localDateCreated.ToString("HH:mm");
+    var dateCreatedText = $"{dateCreated} às {timeCreated}";
+
+    var isCompleted = Model.CompletedAt != null;
+    var statusText = isCompleted ? "Concluída" : "Pendente";
+
+    var localDateCompleted = Model.CompletedAt?.ToLocalTime();
+    var dateCompleted = localDateCompleted?.ToString("dd/MM/yyyy");
+    var timeCompleted = localDateCompleted?.ToString("HH:mm");
+    var dateCompletedText = $"{dateCompleted} às {timeCompleted}";
+}
+
+<div class="card text-start" style="width: 18rem;">
+    <div class="card-header">
+        <h5 class="card-title fs-6 mb-0">@Model.Title</h5>
+    </div>
+
+    <div class="card-body pt-2 pb-2">
+        <p class="card-text mb-1">@Model.Description</p>
+        <p class="fw-bold">Criado em: <span class="fw-normal">@dateCreatedText</span></p>
+        <p class="fw-bold">Status: <span class="fw-normal">@statusText</span></p>
+    </div>
+
+    <div class="card-footer d-flex justify-content-between">
+        @if (isCompleted)
+        {
+            <p class="fw-bold">Concluída em: <span class="fw-normal">@dateCompletedText</span></p>
+        }
+        else
+        {
+            <button class="btn btn-sm btn-success">Concluir</button>
+            <button class="btn btn-sm btn-primary">Editar</button>
+            <button class="btn btn-sm btn-danger">Excluir</button>
+        }
+    </div>
+</div>
