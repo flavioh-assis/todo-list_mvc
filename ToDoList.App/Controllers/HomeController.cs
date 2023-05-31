@@ -59,9 +59,23 @@ namespace ToDoList.App.Controllers
 			return RedirectToAction("Index", "Home");
 		}
 
-		public IActionResult Edit()
+		public async Task<IActionResult> EditAsync([FromRoute] int id)
 		{
-			return View();
+			var task = await _taskRepository.GetById(id);
+
+			return View(task);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> UpdateAsync([FromRoute] int id, TaskViewModel model)
+		{
+			var task = await _taskRepository.GetById(id);
+			task.Title = model.Title;
+			task.Description = model.Description;
+
+			await _taskRepository.Update(task);
+
+			return RedirectToAction("Index", "Home");
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

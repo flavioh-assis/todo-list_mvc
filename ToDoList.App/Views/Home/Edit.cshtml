@@ -9,7 +9,7 @@
     var dateCreatedText = $"{dateCreated} às {timeCreated}";
 }
 
-<form method="post" asp-controller="Home" asp-action="Update">
+<form method="post" asp-controller="Home" asp-action="Update" asp-route-id="@Model.Id">
     <h1 class="fs-4 text-center">Alterar Tarefa</h1>
 
     <div class="d-flex flex-column align-items-center gap-2">
@@ -36,7 +36,7 @@
         </div>
 
         <div class="d-flex text-center gap-2">
-            <button type="button" class="btn btn-outline-danger btn-sm">Cancelar</button>
+            <button type="button" id="cancelButton" class="btn btn-outline-danger btn-sm">Cancelar</button>
             <button type="submit" class="btn btn-success btn-sm">Salvar</button>
         </div>
     </div>

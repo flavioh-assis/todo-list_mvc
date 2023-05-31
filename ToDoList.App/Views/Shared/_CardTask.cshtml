@@ -35,7 +35,9 @@
         {
             <button type="button" data-bs-toggle="modal" data-bs-target="#complete-@Model.Id" onclick="Complete(this)"
                 class="btn btn-sm btn-success">Concluir</button>
-            <button class="btn btn-sm btn-primary">Editar</button>
+
+            <button class="btn btn-sm btn-primary" onclick="Redirect('Home/Edit', @Model.Id)">Editar</button>
+
             <button class="btn btn-sm btn-danger">Excluir</button>
         }
     </div>
