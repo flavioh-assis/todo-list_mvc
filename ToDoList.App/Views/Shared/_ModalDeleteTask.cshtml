@@ -1,0 +1,24 @@
+@model TaskModel
+
+<form method="post" asp-controller="Home" asp-action="Delete" asp-route-id="@Model.Id" id="delete-@Model.Id"
+    class="modal fade">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Excluir Tarefa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <p>Deseja excluir a tarefa <strong>@Model.Title</strong>?</p>
+                <p>Essa ação não poderá ser desfeita.</p>
+                <input type="hidden" name="id" value="@Model.Id" />
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</form>

@@ -17,7 +17,7 @@ namespace ToDoList.App.Controllers
 			_taskRepository = taskRepository;
 		}
 
-		public async Task<IActionResult> IndexAsync()
+		public async Task<IActionResult> Index()
 		{
 			var allTasks = await _taskRepository.GetAll();
 			var pendingTasks = allTasks.Select(x => x).Where(x => x.CompletedAt == null).ToList();
@@ -25,7 +25,7 @@ namespace ToDoList.App.Controllers
 			return View(pendingTasks);
 		}
 
-		public async Task<IActionResult> CompletedAsync()
+		public async Task<IActionResult> Completed()
 		{
 			var allTasks = await _taskRepository.GetAll();
 			var completedTasks = allTasks.Select(x => x).Where(x => x.CompletedAt != null).ToList();
@@ -34,14 +34,14 @@ namespace ToDoList.App.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CompleteAsync(CompleteTaskViewModel model)
+		public async Task<IActionResult> Complete(CompleteTaskViewModel model)
 		{
 			var task = await _taskRepository.GetById(model.Id);
 			task.CompletedAt = DateTime.UtcNow;
 
 			await _taskRepository.Update(task);
 
-			return RedirectToAction("Completed", "Home");
+			return RedirectToAction(nameof(Completed));
 		}
 
 		public IActionResult Create()
@@ -50,7 +50,7 @@ namespace ToDoList.App.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreateAsync(TaskViewModel model)
+		public async Task<IActionResult> Create(TaskViewModel model)
 		{
 			var newTask = new TaskModel { Title = model.Title, Description = model.Description };
 
@@ -59,7 +59,7 @@ namespace ToDoList.App.Controllers
 			return RedirectToAction("Index", "Home");
 		}
 
-		public async Task<IActionResult> EditAsync([FromRoute] int id)
+		public async Task<IActionResult> Edit([FromRoute] int id)
 		{
 			var task = await _taskRepository.GetById(id);
 
@@ -67,7 +67,7 @@ namespace ToDoList.App.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> UpdateAsync([FromRoute] int id, TaskViewModel model)
+		public async Task<IActionResult> Update([FromRoute] int id, TaskViewModel model)
 		{
 			var task = await _taskRepository.GetById(id);
 			task.Title = model.Title;
@@ -75,7 +75,17 @@ namespace ToDoList.App.Controllers
 
 			await _taskRepository.Update(task);
 
-			return RedirectToAction("Index", "Home");
+			return RedirectToAction(nameof(Index));
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Delete([FromRoute] int id)
+		{
+			var task = await _taskRepository.GetById(id);
+
+			await _taskRepository.Delete(task);
+
+			return RedirectToAction(nameof(Index));
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
