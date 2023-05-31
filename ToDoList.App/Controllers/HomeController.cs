@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using ToDoList.App.Models;
-using ToDoList.App.Repository.Interfaces;
+using ToDoList.App.Services.Interfaces;
 using ToDoList.App.ViewModels;
 
 namespace ToDoList.App.Controllers
@@ -9,26 +9,24 @@ namespace ToDoList.App.Controllers
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
-		private readonly IRepositoryBase<TaskModel> _taskRepository;
+		private readonly ITaskService _taskService;
 
-		public HomeController(ILogger<HomeController> logger, IRepositoryBase<TaskModel> taskRepository)
+		public HomeController(ILogger<HomeController> logger, ITaskService taskService)
 		{
 			_logger = logger;
-			_taskRepository = taskRepository;
+			_taskService = taskService;
 		}
 
 		public async Task<IActionResult> Index()
 		{
-			var allTasks = await _taskRepository.GetAll();
-			var pendingTasks = allTasks.Select(x => x).Where(x => x.CompletedAt == null).ToList();
+			var pendingTasks = await _taskService.GetAllPending();
 
 			return View(pendingTasks);
 		}
 
 		public async Task<IActionResult> Completed()
 		{
-			var allTasks = await _taskRepository.GetAll();
-			var completedTasks = allTasks.Select(x => x).Where(x => x.CompletedAt != null).ToList();
+			var completedTasks = await _taskService.GetAllCompleted();
 
 			return View(completedTasks);
 		}
@@ -36,10 +34,7 @@ namespace ToDoList.App.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Complete([FromRoute] int id)
 		{
-			var task = await _taskRepository.GetById(id);
-			task.CompletedAt = DateTime.UtcNow;
-
-			await _taskRepository.Update(task);
+			await _taskService.CompleteTask(id);
 
 			return RedirectToAction(nameof(Completed));
 		}
@@ -52,16 +47,14 @@ namespace ToDoList.App.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Create(TaskViewModel model)
 		{
-			var newTask = new TaskModel { Title = model.Title, Description = model.Description };
+			await _taskService.Add(model);
 
-			await _taskRepository.Create(newTask);
-
-			return RedirectToAction("Index", "Home");
+			return RedirectToAction(nameof(Index));
 		}
 
 		public async Task<IActionResult> Edit([FromRoute] int id)
 		{
-			var task = await _taskRepository.GetById(id);
+			var task = await _taskService.GetById(id);
 
 			return View(task);
 		}
@@ -69,11 +62,7 @@ namespace ToDoList.App.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Update([FromRoute] int id, TaskViewModel model)
 		{
-			var task = await _taskRepository.GetById(id);
-			task.Title = model.Title;
-			task.Description = model.Description;
-
-			await _taskRepository.Update(task);
+			await _taskService.Update(id, model);
 
 			return RedirectToAction(nameof(Index));
 		}
@@ -81,9 +70,7 @@ namespace ToDoList.App.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Delete([FromRoute] int id)
 		{
-			var task = await _taskRepository.GetById(id);
-
-			await _taskRepository.Delete(task);
+			await _taskService.Remove(id);
 
 			return RedirectToAction(nameof(Index));
 		}

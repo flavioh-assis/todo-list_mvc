@@ -3,10 +3,13 @@ using ToDoList.App.Data.Context;
 using ToDoList.App.Repository;
 using ToDoList.App.Repository.Base;
 using ToDoList.App.Repository.Interfaces;
+using ToDoList.App.Services;
+using ToDoList.App.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+builder.Services.AddScoped(typeof(ITaskService), typeof(TaskService));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
