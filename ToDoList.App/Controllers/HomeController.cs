@@ -34,9 +34,9 @@ namespace ToDoList.App.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Complete(CompleteTaskViewModel model)
+		public async Task<IActionResult> Complete([FromRoute] int id)
 		{
-			var task = await _taskRepository.GetById(model.Id);
+			var task = await _taskRepository.GetById(id);
 			task.CompletedAt = DateTime.UtcNow;
 
 			await _taskRepository.Update(task);

@@ -1,6 +1,7 @@
 @model TaskModel
 
-<form method="post" asp-controller="Home" asp-action="Complete" id="complete-@Model.Id" class="modal fade">
+<form method="post" asp-controller="Home" asp-action="Complete" asp-route-id="@Model.Id" id="complete-@Model.Id"
+    class="modal fade">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,8 +11,7 @@
 
             <div class="modal-body">
                 <p>Deseja concluir a tarefa <strong>@Model.Title</strong>?</p>
-                <p>Essa ação não poderá ser revertida.</p>
-                <input type="hidden" name="id" value="@Model.Id" />
+                <p>Essa ação não poderá ser desfeita.</p>
             </div>
 
             <div class="modal-footer">
