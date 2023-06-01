@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33712.159
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoList.App", "ToDoList.App\ToDoList.App.csproj", "{2D5ED1E2-F2D0-43CA-B97F-81C9F2470D73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoList.Test", "ToDoList.Test\ToDoList.Test.csproj", "{08182724-99C0-4083-A369-5963158A3945}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoList.Tests", "ToDoList.Tests\ToDoList.Tests.csproj", "{08182724-99C0-4083-A369-5963158A3945}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
