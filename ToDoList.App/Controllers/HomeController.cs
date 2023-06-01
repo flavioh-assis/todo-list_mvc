@@ -6,12 +6,12 @@ using ToDoList.App.ViewModels;
 
 namespace ToDoList.App.Controllers
 {
-	public class HomeController : Controller
+	public class TaskController : Controller
 	{
-		private readonly ILogger<HomeController> _logger;
+		private readonly ILogger<TaskController> _logger;
 		private readonly ITaskService _taskService;
 
-		public HomeController(ILogger<HomeController> logger, ITaskService taskService)
+		public TaskController(ILogger<TaskController> logger, ITaskService taskService)
 		{
 			_logger = logger;
 			_taskService = taskService;

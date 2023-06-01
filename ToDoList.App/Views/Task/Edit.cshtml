@@ -9,7 +9,7 @@
     var dateCreatedText = $"{dateCreated} às {timeCreated}";
 }
 
-<form method="post" asp-controller="Home" asp-action="Update" asp-route-id="@Model.Id">
+<form method="post" asp-controller="Task" asp-action="Update" asp-route-id="@Model.Id">
     <h1 class="fs-4 text-center">Alterar Tarefa</h1>
 
     <div class="d-flex flex-column align-items-center gap-2">

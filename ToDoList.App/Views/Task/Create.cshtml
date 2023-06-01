@@ -7,7 +7,7 @@
 <div>
     <h1 class="fs-4 text-center">Nova Tarefa</h1>
 
-    <form method="post" asp-controller="Home" asp-action="Create" class="d-flex flex-column align-items-center gap-2">
+    <form method="post" asp-controller="Task" asp-action="Create" class="d-flex flex-column align-items-center gap-2">
         <div class="mb-3">
             <label asp-for="Title" class="form-label"></label>
             <input asp-for="Title" name="title" id="title" placeholder="Estudar ASP.NET" required
