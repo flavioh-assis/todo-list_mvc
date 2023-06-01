@@ -44,4 +44,26 @@ public class TaskControllerTests
 
         result.As<ViewResult>().ViewData.Model.Should().Be(pendingTasks);
     }
+
+    [Fact]
+    public async void Completed_ShouldReturnViewResult()
+    {
+        var completedTasks = A.Fake<List<TaskModel>>();
+        A.CallTo(() => _taskService.GetAllCompleted()).Returns(completedTasks);
+
+        var result = await _taskController.Completed();
+
+        result.Should().BeOfType<ViewResult>();
+    }
+
+    [Fact]
+    public async void Completed_ShouldReturnCompletedTasks()
+    {
+        var completedTasks = A.Fake<List<TaskModel>>();
+        A.CallTo(() => _taskService.GetAllCompleted()).Returns(completedTasks);
+
+        var result = await _taskController.Completed();
+
+        result.As<ViewResult>().ViewData.Model.Should().Be(completedTasks);
+    }
 }
