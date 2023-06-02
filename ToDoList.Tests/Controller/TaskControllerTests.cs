@@ -74,4 +74,51 @@ public class TaskControllerTests
 
         result.Should().BeOfType<ViewResult>();
     }
+
+    [Fact]
+    public async void Edit_ShouldReturnViewResult()
+    {
+        const int taskId = 1;
+        var task = A.Fake<TaskModel>();
+        A.CallTo(() => _taskService.GetById(taskId)).Returns(task);
+
+        var result = await _taskController.Edit(taskId);
+
+        result.Should().BeOfType<ViewResult>();
+    }
+    
+    [Fact]
+    public async void Edit_ShouldReturnTask()
+    {
+        const int taskId = 1;
+        var task = A.Fake<TaskModel>();
+        A.CallTo(() => _taskService.GetById(taskId)).Returns(task);
+
+        var result = await _taskController.Edit(taskId);
+
+        result.As<ViewResult>().ViewData.Model.Should().Be(task);
+    }
+
+    [Fact]
+    public async void Edit_WhenIdLessThanOne_ShouldRedirectToErrorPage()
+    {
+        const int invalidTaskId = 0;
+
+        var result = await _taskController.Edit(invalidTaskId);
+
+        result.Should().BeOfType<RedirectToActionResult>()
+            .Which.ActionName.Should().Be("Error");
+    }
+
+    [Fact]
+    public async void Edit_WhenTaskNull_ShouldRedirectToErrorPage()
+    {
+        const int nonExistentTaskId = 999;
+        A.CallTo(() => _taskService.GetById(nonExistentTaskId)).Returns(null as TaskModel);
+
+        var result = await _taskController.Edit(nonExistentTaskId);
+
+        result.Should().BeOfType<RedirectToActionResult>()
+            .Which.ActionName.Should().Be("Error");
+    }
 }
