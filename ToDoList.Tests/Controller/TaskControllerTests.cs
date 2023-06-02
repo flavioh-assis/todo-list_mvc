@@ -66,4 +66,12 @@ public class TaskControllerTests
 
         result.As<ViewResult>().ViewData.Model.Should().Be(completedTasks);
     }
+
+    [Fact]
+    public void Create_ShouldReturnViewResult()
+    {
+        var result = _taskController.Create();
+
+        result.Should().BeOfType<ViewResult>();
+    }
 }
