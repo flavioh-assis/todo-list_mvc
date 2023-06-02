@@ -114,11 +114,37 @@ public class TaskControllerTests
 	public async void Edit_WhenTaskNull_ShouldRedirectToErrorPage()
 	{
 		const int nonExistentTaskId = 999;
+		
 		A.CallTo(() => _taskService.GetById(nonExistentTaskId)).Returns(null as TaskModel);
 
 		var result = await _taskController.Edit(nonExistentTaskId);
 
 		result.Should().BeOfType<RedirectToActionResult>()
 			.Which.ActionName.Should().Be("Error");
+	}
+
+	[Fact]
+	public async void Complete_WhenIdValid_ShouldRedirectToActionCompleted()
+	{
+		const int taskId = 1;
+		const string expectedActionName = "Completed";
+		A.CallTo(() => _taskService.CompleteTask(taskId)).DoesNothing();
+		
+		var result = await _taskController.Complete(taskId);
+
+		result.Should().BeOfType<RedirectToActionResult>()
+			.Which.ActionName.Should().Be(expectedActionName);
+	}
+
+	[Fact]
+	public async void Complete_WhenIdLessThanOne_ShouldRedirectToActionError()
+	{
+		const int invalidTaskId = 0;
+		const string expectedActionName = "Error";
+
+		var result = await _taskController.Complete(invalidTaskId);
+
+		result.Should().BeOfType<RedirectToActionResult>()
+			.Which.ActionName.Should().Be(expectedActionName);
 	}
 }

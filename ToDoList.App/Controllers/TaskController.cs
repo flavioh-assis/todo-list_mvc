@@ -34,6 +34,9 @@ namespace ToDoList.App.Controllers
         [HttpPost]
         public async Task<IActionResult> Complete([FromRoute] int id)
         {
+            if (id <= 0)
+                return RedirectToAction(nameof(Error));
+            
             await _taskService.CompleteTask(id);
 
             return RedirectToAction(nameof(Completed));
