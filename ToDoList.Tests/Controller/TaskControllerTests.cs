@@ -12,113 +12,113 @@ namespace ToDoList.Test.Controller;
 
 public class TaskControllerTests
 {
-    private readonly TaskController _taskController;
-    private readonly ITaskService _taskService;
+	private readonly TaskController _taskController;
+	private readonly ITaskService _taskService;
 
-    public TaskControllerTests()
-    {
-        var logger = A.Fake<ILogger<TaskController>>();
-        _taskService = A.Fake<ITaskService>();
+	public TaskControllerTests()
+	{
+		var logger = A.Fake<ILogger<TaskController>>();
+		_taskService = A.Fake<ITaskService>();
 
-        _taskController = new TaskController(logger, _taskService);
-    }
+		_taskController = new TaskController(logger, _taskService);
+	}
 
-    [Fact]
-    public async void Index_ShouldReturnViewResult()
-    {
-        var pendingTasks = A.Fake<List<TaskModel>>();
-        A.CallTo(() => _taskService.GetAllPending()).Returns(pendingTasks);
+	[Fact]
+	public async void Index_ShouldReturnViewResult()
+	{
+		var pendingTasks = A.Fake<List<TaskModel>>();
+		A.CallTo(() => _taskService.GetAllPending()).Returns(pendingTasks);
 
-        var result = await _taskController.Index();
+		var result = await _taskController.Index();
 
-        result.Should().BeOfType<ViewResult>();
-    }
+		result.Should().BeOfType<ViewResult>();
+	}
 
-    [Fact]
-    public async void Index_ShouldReturnPendingTasks()
-    {
-        var pendingTasks = A.Fake<List<TaskModel>>();
-        A.CallTo(() => _taskService.GetAllPending()).Returns(pendingTasks);
+	[Fact]
+	public async void Index_ShouldReturnPendingTasks()
+	{
+		var pendingTasks = A.Fake<List<TaskModel>>();
+		A.CallTo(() => _taskService.GetAllPending()).Returns(pendingTasks);
 
-        var result = await _taskController.Index();
+		var result = await _taskController.Index();
 
-        result.As<ViewResult>().ViewData.Model.Should().Be(pendingTasks);
-    }
+		result.As<ViewResult>().ViewData.Model.Should().Be(pendingTasks);
+	}
 
-    [Fact]
-    public async void Completed_ShouldReturnViewResult()
-    {
-        var completedTasks = A.Fake<List<TaskModel>>();
-        A.CallTo(() => _taskService.GetAllCompleted()).Returns(completedTasks);
+	[Fact]
+	public async void Completed_ShouldReturnViewResult()
+	{
+		var completedTasks = A.Fake<List<TaskModel>>();
+		A.CallTo(() => _taskService.GetAllCompleted()).Returns(completedTasks);
 
-        var result = await _taskController.Completed();
+		var result = await _taskController.Completed();
 
-        result.Should().BeOfType<ViewResult>();
-    }
+		result.Should().BeOfType<ViewResult>();
+	}
 
-    [Fact]
-    public async void Completed_ShouldReturnCompletedTasks()
-    {
-        var completedTasks = A.Fake<List<TaskModel>>();
-        A.CallTo(() => _taskService.GetAllCompleted()).Returns(completedTasks);
+	[Fact]
+	public async void Completed_ShouldReturnCompletedTasks()
+	{
+		var completedTasks = A.Fake<List<TaskModel>>();
+		A.CallTo(() => _taskService.GetAllCompleted()).Returns(completedTasks);
 
-        var result = await _taskController.Completed();
+		var result = await _taskController.Completed();
 
-        result.As<ViewResult>().ViewData.Model.Should().Be(completedTasks);
-    }
+		result.As<ViewResult>().ViewData.Model.Should().Be(completedTasks);
+	}
 
-    [Fact]
-    public void Create_ShouldReturnViewResult()
-    {
-        var result = _taskController.Create();
+	[Fact]
+	public void Create_ShouldReturnViewResult()
+	{
+		var result = _taskController.Create();
 
-        result.Should().BeOfType<ViewResult>();
-    }
+		result.Should().BeOfType<ViewResult>();
+	}
 
-    [Fact]
-    public async void Edit_ShouldReturnViewResult()
-    {
-        const int taskId = 1;
-        var task = A.Fake<TaskModel>();
-        A.CallTo(() => _taskService.GetById(taskId)).Returns(task);
+	[Fact]
+	public async void Edit_WhenIdValid_ShouldReturnViewResult()
+	{
+		const int taskId = 1;
+		var task = A.Fake<TaskModel>();
+		A.CallTo(() => _taskService.GetById(taskId)).Returns(task);
 
-        var result = await _taskController.Edit(taskId);
+		var result = await _taskController.Edit(taskId);
 
-        result.Should().BeOfType<ViewResult>();
-    }
-    
-    [Fact]
-    public async void Edit_ShouldReturnTask()
-    {
-        const int taskId = 1;
-        var task = A.Fake<TaskModel>();
-        A.CallTo(() => _taskService.GetById(taskId)).Returns(task);
+		result.Should().BeOfType<ViewResult>();
+	}
 
-        var result = await _taskController.Edit(taskId);
+	[Fact]
+	public async void Edit_WhenIdValid_ShouldReturnTask()
+	{
+		const int taskId = 1;
+		var task = A.Fake<TaskModel>();
+		A.CallTo(() => _taskService.GetById(taskId)).Returns(task);
 
-        result.As<ViewResult>().ViewData.Model.Should().Be(task);
-    }
+		var result = await _taskController.Edit(taskId);
 
-    [Fact]
-    public async void Edit_WhenIdLessThanOne_ShouldRedirectToErrorPage()
-    {
-        const int invalidTaskId = 0;
+		result.As<ViewResult>().ViewData.Model.Should().Be(task);
+	}
 
-        var result = await _taskController.Edit(invalidTaskId);
+	[Fact]
+	public async void Edit_WhenIdLessThanOne_ShouldRedirectToErrorPage()
+	{
+		const int invalidTaskId = 0;
 
-        result.Should().BeOfType<RedirectToActionResult>()
-            .Which.ActionName.Should().Be("Error");
-    }
+		var result = await _taskController.Edit(invalidTaskId);
 
-    [Fact]
-    public async void Edit_WhenTaskNull_ShouldRedirectToErrorPage()
-    {
-        const int nonExistentTaskId = 999;
-        A.CallTo(() => _taskService.GetById(nonExistentTaskId)).Returns(null as TaskModel);
+		result.Should().BeOfType<RedirectToActionResult>()
+			.Which.ActionName.Should().Be("Error");
+	}
 
-        var result = await _taskController.Edit(nonExistentTaskId);
+	[Fact]
+	public async void Edit_WhenTaskNull_ShouldRedirectToErrorPage()
+	{
+		const int nonExistentTaskId = 999;
+		A.CallTo(() => _taskService.GetById(nonExistentTaskId)).Returns(null as TaskModel);
 
-        result.Should().BeOfType<RedirectToActionResult>()
-            .Which.ActionName.Should().Be("Error");
-    }
+		var result = await _taskController.Edit(nonExistentTaskId);
+
+		result.Should().BeOfType<RedirectToActionResult>()
+			.Which.ActionName.Should().Be("Error");
+	}
 }
