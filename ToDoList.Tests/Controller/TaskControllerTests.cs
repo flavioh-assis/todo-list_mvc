@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using ToDoList.App.Controllers;
 using ToDoList.App.Models;
 using ToDoList.App.Services.Interfaces;
+using ToDoList.App.ViewModels;
 using Xunit;
 
 namespace ToDoList.Test.Controller;
@@ -143,6 +144,39 @@ public class TaskControllerTests
 		const string expectedActionName = "Error";
 
 		var result = await _taskController.Complete(invalidTaskId);
+
+		result.Should().BeOfType<RedirectToActionResult>()
+			.Which.ActionName.Should().Be(expectedActionName);
+	}
+
+	[Fact]
+	public async void Create_WhenModelValid_ShouldRedirectToActionIndex()
+	{
+		var model = new TaskViewModel
+		{
+			Title = "Titulo",
+			Description = ""
+		};
+		const string expectedActionName = "Index";
+		A.CallTo(() => _taskService.Add(model)).DoesNothing();
+
+		var result = await _taskController.Create(model);
+
+		result.Should().BeOfType<RedirectToActionResult>()
+			.Which.ActionName.Should().Be(expectedActionName);
+	}
+	
+	[Fact]
+	public async void Create_WhenModelInvalid_ShouldRedirectToActionCreate()
+	{
+		var invalidModel = new TaskViewModel
+		{
+			Title = "a",
+			Description = null
+		};
+		const string expectedActionName = "Error";
+
+		var result = await _taskController.Create(invalidModel);
 
 		result.Should().BeOfType<RedirectToActionResult>()
 			.Which.ActionName.Should().Be(expectedActionName);
