@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using ToDoList.App.Models;
 using ToDoList.App.Services.Interfaces;
+using ToDoList.App.Validators;
 using ToDoList.App.ViewModels;
 
 namespace ToDoList.App.Controllers
@@ -50,6 +51,12 @@ namespace ToDoList.App.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(TaskViewModel model)
         {
+            var validator = new TaskViewModelValidator();
+            var results = await validator.ValidateAsync(model);
+
+            if (!results.IsValid)
+                return RedirectToAction(nameof(Error));
+            
             await _taskService.Add(model);
 
             return RedirectToAction(nameof(Index));
