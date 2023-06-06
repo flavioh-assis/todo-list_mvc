@@ -227,4 +227,29 @@ public class TaskControllerTests
 		result.Should().BeOfType<RedirectToActionResult>()
 			.Which.ActionName.Should().Be(expectedActionName);
 	}
+
+	[Fact]
+	public async void Delete_WhenIdValid_ShouldRedirectToActionIndex()
+	{
+		const int taskId = 1;
+		A.CallTo(() => _taskService.Remove(taskId)).DoesNothing();
+		const string expectedActionName = "Index";
+
+		var result = await _taskController.Delete(taskId);
+
+		result.Should().BeOfType<RedirectToActionResult>()
+			.Which.ActionName.Should().Be(expectedActionName);
+	}
+
+	[Fact]
+	public async void Delete_WhenIdInvalid_ShouldRedirectToActionError()
+	{
+		const int invalidTaskId = 0;
+		const string expectedActionName = "Error";
+
+		var result = await _taskController.Delete(invalidTaskId);
+
+		result.Should().BeOfType<RedirectToActionResult>()
+			.Which.ActionName.Should().Be(expectedActionName);
+	}
 }

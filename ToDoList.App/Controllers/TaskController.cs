@@ -95,6 +95,9 @@ namespace ToDoList.App.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            if (id <= 0)
+                return RedirectToAction(nameof(Error));
+            
             await _taskService.Remove(id);
 
             return RedirectToAction(nameof(Index));
