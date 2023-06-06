@@ -154,7 +154,7 @@ public class TaskControllerTests
 	{
 		var model = new TaskViewModel
 		{
-			Title = "Titulo",
+			Title = "Task title",
 			Description = ""
 		};
 		const string expectedActionName = "Index";
@@ -177,6 +177,52 @@ public class TaskControllerTests
 		const string expectedActionName = "Error";
 
 		var result = await _taskController.Create(invalidModel);
+
+		result.Should().BeOfType<RedirectToActionResult>()
+			.Which.ActionName.Should().Be(expectedActionName);
+	}
+
+	[Fact]
+	public async void Update_WhenIdValid_ShouldRedirectToActionIndex()
+	{
+		const int taskId = 1;
+		var model = new TaskViewModel
+		{
+			Title = "Task title",
+			Description = ""
+		};
+		const string expectedActionName = "Index";
+		A.CallTo(() => _taskService.Update(taskId, model)).DoesNothing();
+
+		var result = await _taskController.Update(taskId, model);
+
+		result.Should().BeOfType<RedirectToActionResult>()
+			.Which.ActionName.Should().Be(expectedActionName);
+	}
+
+	[Fact]
+	public async void Update_WhenIdInvalid_ShouldRedirectToActionError()
+	{
+		const int invalidTaskId = 0;
+		var model = A.Fake<TaskViewModel>();
+		const string expectedActionName = "Error";
+		A.CallTo(() => _taskService.Update(invalidTaskId, model)).DoesNothing();
+
+		var result = await _taskController.Update(invalidTaskId, model);
+
+		result.Should().BeOfType<RedirectToActionResult>()
+			.Which.ActionName.Should().Be(expectedActionName);
+	}
+	
+	[Fact]
+	public async void Update_WhenModelInvalid_ShouldRedirectToActionError()
+	{
+		const int taskId = 1;
+		var invalidModel = A.Fake<TaskViewModel>();
+		const string expectedActionName = "Error";
+		A.CallTo(() => _taskService.Update(taskId, invalidModel)).DoesNothing();
+
+		var result = await _taskController.Update(taskId, invalidModel);
 
 		result.Should().BeOfType<RedirectToActionResult>()
 			.Which.ActionName.Should().Be(expectedActionName);

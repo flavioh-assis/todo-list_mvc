@@ -11,11 +11,13 @@ namespace ToDoList.App.Controllers
     {
         private readonly ILogger<TaskController> _logger;
         private readonly ITaskService _taskService;
+        private readonly TaskViewModelValidator _validator;
 
         public TaskController(ILogger<TaskController> logger, ITaskService taskService)
         {
             _logger = logger;
             _taskService = taskService;
+            _validator = new TaskViewModelValidator();
         }
 
         public async Task<IActionResult> Index()
@@ -51,8 +53,7 @@ namespace ToDoList.App.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(TaskViewModel model)
         {
-            var validator = new TaskViewModelValidator();
-            var results = await validator.ValidateAsync(model);
+            var results = await _validator.ValidateAsync(model);
 
             if (!results.IsValid)
                 return RedirectToAction(nameof(Error));
@@ -78,6 +79,14 @@ namespace ToDoList.App.Controllers
         [HttpPost]
         public async Task<IActionResult> Update([FromRoute] int id, TaskViewModel model)
         {
+            if (id <= 0)
+                return RedirectToAction(nameof(Error));
+
+            var results = await _validator.ValidateAsync(model);
+
+            if (!results.IsValid)
+                return RedirectToAction(nameof(Error)); 
+            
             await _taskService.Update(id, model);
 
             return RedirectToAction(nameof(Index));
