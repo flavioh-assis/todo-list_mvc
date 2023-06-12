@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using ToDoList.App.Controllers;
 using ToDoList.App.Models;
@@ -15,6 +16,7 @@ public class TaskControllerTests
 {
     private readonly TaskController _taskController;
     private readonly ITaskService _taskService;
+    private readonly ITempDataDictionary _fakeTempData = A.Fake<ITempDataDictionary>();
 
     public TaskControllerTests()
     {
@@ -22,6 +24,7 @@ public class TaskControllerTests
         _taskService = A.Fake<ITaskService>();
 
         _taskController = new TaskController(logger, _taskService);
+        _taskController.TempData = _fakeTempData;
     }
 
     [Fact]
@@ -244,6 +247,7 @@ public class TaskControllerTests
         const int invalidTaskId = 0;
         const string expectedActionName = "Error";
 
+        _taskController.TempData = _fakeTempData;
         var result = await _taskController.Delete(invalidTaskId);
 
         result.Should().BeOfType<RedirectToActionResult>()

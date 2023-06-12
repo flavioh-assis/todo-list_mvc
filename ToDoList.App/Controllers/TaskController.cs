@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using ToDoList.App.Models;
 using ToDoList.App.Services.Interfaces;
 using ToDoList.App.Validators;
@@ -38,7 +37,10 @@ namespace ToDoList.App.Controllers
         public async Task<IActionResult> Complete([FromRoute] int id)
         {
             if (id <= 0)
+            {
+                TempData["ErrorMessage"] = "O id informado é inválido.";
                 return RedirectToAction(nameof(Error));
+            }
 
             await _taskService.CompleteTask(id);
 
@@ -56,7 +58,10 @@ namespace ToDoList.App.Controllers
             var results = await _validator.ValidateAsync(model);
 
             if (!results.IsValid)
+            {
+                TempData["ErrorMessage"] = results.Errors[0].ToString();
                 return RedirectToAction(nameof(Error));
+            }
 
             await _taskService.Add(model);
 
@@ -66,26 +71,36 @@ namespace ToDoList.App.Controllers
         public async Task<IActionResult> Edit([FromRoute] int id)
         {
             if (id <= 0)
+            {
+                TempData["ErrorMessage"] = "O id informado é inválido.";
                 return RedirectToAction(nameof(Error));
+            }
 
             var task = await _taskService.GetById(id);
 
-            if (task is null)
-                return RedirectToAction(nameof(Error));
+            if (task is not null)
+                return View(task);
 
-            return View(task);
+            TempData["ErrorMessage"] = "Tarefa não existe.";
+            return RedirectToAction(nameof(Error));
         }
 
         [HttpPost]
         public async Task<IActionResult> Update([FromRoute] int id, TaskViewModel model)
         {
             if (id <= 0)
+            {
+                TempData["ErrorMessage"] = "O id informado é inválido.";
                 return RedirectToAction(nameof(Error));
+            }
 
             var results = await _validator.ValidateAsync(model);
 
             if (!results.IsValid)
+            {
+                TempData["ErrorMessage"] = results.Errors;
                 return RedirectToAction(nameof(Error));
+            }
 
             await _taskService.Update(id, model);
 
@@ -96,7 +111,10 @@ namespace ToDoList.App.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (id <= 0)
+            {
+                TempData["ErrorMessage"] = "O id informado é inválido.";
                 return RedirectToAction(nameof(Error));
+            }
 
             await _taskService.Remove(id);
 
@@ -106,7 +124,9 @@ namespace ToDoList.App.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var errorMessage = TempData["ErrorMessage"] as string;
+
+            return View(new ErrorViewModel { Message = errorMessage });
         }
     }
 }
