@@ -39,7 +39,7 @@ namespace ToDoList.App.Controllers
         {
             if (id <= 0)
                 return RedirectToAction(nameof(Error));
-            
+
             await _taskService.CompleteTask(id);
 
             return RedirectToAction(nameof(Completed));
@@ -57,7 +57,7 @@ namespace ToDoList.App.Controllers
 
             if (!results.IsValid)
                 return RedirectToAction(nameof(Error));
-            
+
             await _taskService.Add(model);
 
             return RedirectToAction(nameof(Index));
@@ -85,8 +85,8 @@ namespace ToDoList.App.Controllers
             var results = await _validator.ValidateAsync(model);
 
             if (!results.IsValid)
-                return RedirectToAction(nameof(Error)); 
-            
+                return RedirectToAction(nameof(Error));
+
             await _taskService.Update(id, model);
 
             return RedirectToAction(nameof(Index));
@@ -97,7 +97,7 @@ namespace ToDoList.App.Controllers
         {
             if (id <= 0)
                 return RedirectToAction(nameof(Error));
-            
+
             await _taskService.Remove(id);
 
             return RedirectToAction(nameof(Index));
