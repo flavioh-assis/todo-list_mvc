@@ -8,6 +8,10 @@
 
     <RootNamespace>ToDoList.Test</RootNamespace>
   </PropertyGroup>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="cp $(OutDir)runtimes/unix/lib/netcoreapp3.1/Microsoft.Data.SqlClient.dll $(OutDir)" />
+  </Target>
 
   <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="6.2.1" />
@@ -27,5 +31,4 @@
   <ItemGroup>
     <ProjectReference Include="..\ToDoList.App\ToDoList.App.csproj" />
   </ItemGroup>
-
 </Project>
