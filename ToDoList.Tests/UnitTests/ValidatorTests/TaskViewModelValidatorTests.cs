@@ -4,7 +4,7 @@ using ToDoList.App.Validators;
 using ToDoList.App.ViewModels;
 using Xunit;
 
-namespace ToDoList.Test.Validator;
+namespace ToDoList.Tests.UnitTests.ValidatorTests;
 
 public class TaskViewModelValidatorTests
 {

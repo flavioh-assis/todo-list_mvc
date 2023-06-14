@@ -10,7 +10,7 @@ using ToDoList.App.Services.Interfaces;
 using ToDoList.App.ViewModels;
 using Xunit;
 
-namespace ToDoList.Test.Controller;
+namespace ToDoList.Tests.UnitTests.ControllerTests;
 
 public class TaskControllerTests
 {
