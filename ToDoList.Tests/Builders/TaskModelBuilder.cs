@@ -1,7 +1,7 @@
 using System;
 using ToDoList.App.Models;
 
-namespace ToDoList.Test.Builders;
+namespace ToDoList.Tests.Builders;
 
 public class TaskModelBuilder
 {

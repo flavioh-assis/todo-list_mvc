@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using ToDoList.App.Data.Context;
 
-namespace ToDoList.Test.Factories;
+namespace ToDoList.Tests.Factories;
 
 public class TaskContextFactory : IDesignTimeDbContextFactory<TaskContext>
 {

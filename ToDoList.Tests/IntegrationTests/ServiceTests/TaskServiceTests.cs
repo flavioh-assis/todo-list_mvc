@@ -6,8 +6,8 @@ using ToDoList.App.Data.Context;
 using ToDoList.App.Models;
 using ToDoList.App.Repository;
 using ToDoList.App.Services;
-using ToDoList.Test.Builders;
-using ToDoList.Test.Factories;
+using ToDoList.Tests.Builders;
+using ToDoList.Tests.Factories;
 using Xunit;
 
 namespace ToDoList.Tests.IntegrationTests.ServiceTests;
