@@ -164,6 +164,42 @@ public class TaskServiceTests : IDisposable
         insertedTask.CompletedAt.Should().BeNull();
     }
 
+    [Fact]
+    public async void Update_ShouldUpdateTitle()
+    {
+        var taskId = _task1Pending.Id;
+        var newTitle = "New Title";
+        var currentDescription = _task1Pending.Description;
+        var taskViewModel = _taskViewModelBuilder
+            .WithTitle(newTitle)
+            .WithDescription(currentDescription)
+            .Build();
+
+        await _taskService.Update(taskId, taskViewModel);
+
+        var updatedTask = await _dbContext.Tasks.FindAsync(taskId);
+        updatedTask.Title.Should().Be(newTitle);
+        updatedTask.Description.Should().Be(currentDescription);
+    }
+
+    [Fact]
+    public async void Update_ShouldUpdateDescription()
+    {
+        var taskId = _task1Pending.Id;
+        var newDescription = "New description";
+        var currentTitle = _task1Pending.Title;
+        var taskViewModel = _taskViewModelBuilder
+            .WithTitle(currentTitle)
+            .WithDescription(newDescription)
+            .Build();
+
+        await _taskService.Update(taskId, taskViewModel);
+
+        var updatedTask = await _dbContext.Tasks.FindAsync(taskId);
+        updatedTask.Title.Should().Be(currentTitle);
+        updatedTask.Description.Should().Be(newDescription);
+    }
+
     public void Dispose()
     {
         _dbContext.Database.EnsureDeleted();
