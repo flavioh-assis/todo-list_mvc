@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using ToDoList.App.Data.Context;
 using ToDoList.App.Models;
 using ToDoList.App.Repository;
@@ -145,7 +146,7 @@ public class TaskServiceTests : IDisposable
     }
 
     [Fact]
-    public async void Add_ShouldInsertNewTaskModel()
+    public async void Add_ShouldInsertNewTask()
     {
         var newTaskId = _totalTask + 1;
         var expectedCreatedAt = DateTime.UtcNow;
@@ -198,6 +199,18 @@ public class TaskServiceTests : IDisposable
         var updatedTask = await _dbContext.Tasks.FindAsync(taskId);
         updatedTask.Title.Should().Be(currentTitle);
         updatedTask.Description.Should().Be(newDescription);
+    }
+
+    [Fact]
+    public async void Remove_ShouldRemoveTask()
+    {
+        var taskId = _task1Pending.Id;
+
+        await _taskService.Remove(taskId);
+
+        var allTasks = await _dbContext.Tasks.ToListAsync();
+        allTasks.Should().NotContain(_task1Pending);
+        allTasks.Should().Contain(_task2Completed);
     }
 
     public void Dispose()
