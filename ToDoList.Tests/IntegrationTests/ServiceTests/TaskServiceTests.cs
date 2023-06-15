@@ -87,6 +87,29 @@ public class TaskServiceTests : IDisposable
         result.Should().BeEquivalentTo(expectedResult);
     }
 
+    [Fact]
+    public async void GetAllCompleted_ShouldReturnListTaskModel()
+    {
+        var expectedResultType = typeof(List<TaskModel>);
+
+        var result = await _taskService.GetAllCompleted();
+
+        result.Should().BeOfType(expectedResultType);
+    }
+
+    [Fact]
+    public async void GetAllCompleted_ShouldReturnAllCompletedTasks()
+    {
+        var expectedResult = new List<TaskModel>()
+        {
+            _task2Completed,
+        };
+
+        var result = await _taskService.GetAllCompleted();
+
+        result.Should().BeEquivalentTo(expectedResult);
+    }
+
     public void Dispose()
     {
         _dbContext.Database.EnsureDeleted();
