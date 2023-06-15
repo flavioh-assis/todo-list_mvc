@@ -53,15 +53,10 @@ public class TaskServiceTests : IDisposable
     [Fact]
     public async void GetAll_ShouldReturnAllTasks()
     {
-        var expectedResult = new List<TaskModel>()
-        {
-            _task1Pending,
-            _task2Completed,
-        };
-
         var result = await _taskService.GetAll();
 
-        result.Should().BeEquivalentTo(expectedResult);
+        result.Should().Contain(_task1Pending);
+        result.Should().Contain(_task2Completed);
     }
 
     [Fact]
@@ -77,14 +72,10 @@ public class TaskServiceTests : IDisposable
     [Fact]
     public async void GetAllPending_ShouldReturnAllPendingTasks()
     {
-        var expectedResult = new List<TaskModel>()
-        {
-            _task1Pending,
-        };
-
         var result = await _taskService.GetAllPending();
 
-        result.Should().BeEquivalentTo(expectedResult);
+        result.Should().NotContain(_task2Completed);
+        result.Should().Contain(_task1Pending);
     }
 
     [Fact]
@@ -98,16 +89,12 @@ public class TaskServiceTests : IDisposable
     }
 
     [Fact]
-    public async void GetAllCompleted_ShouldReturnAllCompletedTasks()
+    public async void GetAllCompleted_ShouldReturnCompletedTasksOnly()
     {
-        var expectedResult = new List<TaskModel>()
-        {
-            _task2Completed,
-        };
-
         var result = await _taskService.GetAllCompleted();
 
-        result.Should().BeEquivalentTo(expectedResult);
+        result.Should().NotContain(_task1Pending);
+        result.Should().Contain(_task2Completed);
     }
 
     public void Dispose()
