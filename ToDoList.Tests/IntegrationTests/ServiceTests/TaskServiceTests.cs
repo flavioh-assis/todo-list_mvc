@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using FluentAssertions;
 using ToDoList.App.Data.Context;
 using ToDoList.App.Models;
@@ -16,14 +15,16 @@ public class TaskServiceTests : IDisposable
 {
     private readonly TaskContext _dbContext;
     private readonly TaskService _taskService;
-    private readonly TaskModelBuilder _taskBuilder;
+    private readonly TaskViewModelBuilder _taskViewModelBuilder;
 
     private readonly TaskModel _task1Pending;
     private readonly TaskModel _task2Completed;
+    private readonly int _totalTask;
 
     public TaskServiceTests()
     {
-        _taskBuilder = new TaskModelBuilder();
+        var taskBuilder = new TaskModelBuilder();
+        _taskViewModelBuilder = new TaskViewModelBuilder();
 
         _dbContext = new TaskContextFactory()
             .CreateDbContext(Array.Empty<string>());
@@ -32,12 +33,14 @@ public class TaskServiceTests : IDisposable
         var taskRepository = new TaskRepository(_dbContext);
         _taskService = new TaskService(taskRepository);
 
-        _task1Pending = _taskBuilder.Pending().Build();
-        _task2Completed = _taskBuilder.Completed().Build();
+        _task1Pending = taskBuilder.Pending().Build();
+        _task2Completed = taskBuilder.Completed().Build();
 
         _dbContext.Add(_task1Pending);
         _dbContext.Add(_task2Completed);
         _dbContext.SaveChanges();
+
+        _totalTask = 2;
     }
 
     [Fact]
@@ -139,6 +142,26 @@ public class TaskServiceTests : IDisposable
         await _taskService.CompleteTask(taskId);
 
         _task1Pending.CompletedAt.Should().BeCloseTo(expectedDate, timeSpan);
+    }
+
+    [Fact]
+    public async void Add_ShouldInsertNewTaskModel()
+    {
+        var newTaskId = _totalTask + 1;
+        var expectedCreatedAt = DateTime.UtcNow;
+        var fiveSecondsTimeSpan = new TimeSpan(0, 0, 5);
+        var taskViewModel = _taskViewModelBuilder
+            .WithTitle("New Title")
+            .WithDescription("New description")
+            .Build();
+
+        await _taskService.Add(taskViewModel);
+
+        var insertedTask = await _taskService.GetById(newTaskId);
+        insertedTask.Title.Should().Be(taskViewModel.Title);
+        insertedTask.Description.Should().Be(taskViewModel.Description);
+        insertedTask.CreatedAt.Should().BeCloseTo(expectedCreatedAt, fiveSecondsTimeSpan);
+        insertedTask.CompletedAt.Should().BeNull();
     }
 
     public void Dispose()
