@@ -97,6 +97,27 @@ public class TaskServiceTests : IDisposable
         result.Should().Contain(_task2Completed);
     }
 
+    [Fact]
+    public async void GetById_ShouldReturnTaskModel()
+    {
+        var taskId = _task1Pending.Id;
+        var expectedResultType = typeof(TaskModel);
+
+        var result = await _taskService.GetById(taskId);
+
+        result.Should().BeOfType(expectedResultType);
+    }
+
+    [Fact]
+    public async void GetById_ShouldReturnTaskModelWithId()
+    {
+        var taskId = _task1Pending.Id;
+
+        var result = await _taskService.GetById(taskId);
+
+        result.Should().BeEquivalentTo(_task1Pending);
+    }
+
     public void Dispose()
     {
         _dbContext.Database.EnsureDeleted();
