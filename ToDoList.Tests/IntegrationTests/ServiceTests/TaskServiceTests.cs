@@ -118,6 +118,29 @@ public class TaskServiceTests : IDisposable
         result.Should().BeEquivalentTo(_task1Pending);
     }
 
+    [Fact]
+    public async void CompleteTask_ShouldUpdateCompletedAtAttribute()
+    {
+        var taskId = _task1Pending.Id;
+        _task1Pending.CompletedAt.Should().BeNull();
+
+        await _taskService.CompleteTask(taskId);
+
+        _task1Pending.CompletedAt.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async void CompleteTask_ShouldSetCompletedAtAttribute_ToCurrentUtcDateTime()
+    {
+        var taskId = _task1Pending.Id;
+        var expectedDate = DateTime.UtcNow;
+        var timeSpan = new TimeSpan(0, 0, 5);
+
+        await _taskService.CompleteTask(taskId);
+
+        _task1Pending.CompletedAt.Should().BeCloseTo(expectedDate, timeSpan);
+    }
+
     public void Dispose()
     {
         _dbContext.Database.EnsureDeleted();
