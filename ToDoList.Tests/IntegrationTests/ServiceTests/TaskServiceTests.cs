@@ -157,7 +157,7 @@ public class TaskServiceTests : IDisposable
 
         await _taskService.Add(taskViewModel);
 
-        var insertedTask = await _taskService.GetById(newTaskId);
+        var insertedTask = await _dbContext.Tasks.FindAsync(newTaskId);
         insertedTask.Title.Should().Be(taskViewModel.Title);
         insertedTask.Description.Should().Be(taskViewModel.Description);
         insertedTask.CreatedAt.Should().BeCloseTo(expectedCreatedAt, fiveSecondsTimeSpan);
