@@ -18,7 +18,7 @@ public class TaskModelBuilder
         {
             Title = "Title",
             Description = "Description",
-            CreatedAt = DateTime.Today
+            CreatedAt = DateTime.UtcNow
         };
     }
     
@@ -34,18 +34,6 @@ public class TaskModelBuilder
         return this;
     }
 
-    public TaskModelBuilder WithCreatedAt(DateTime createdAt)
-    {
-        _task.CreatedAt = createdAt;
-        return this;
-    }
-
-    public TaskModelBuilder WithCompletedAt(DateTime? completedAt)
-    {
-        _task.CompletedAt = completedAt;
-        return this;
-    }
-
     public TaskModelBuilder Pending()
     {
         _task.CompletedAt = null;
@@ -54,7 +42,7 @@ public class TaskModelBuilder
 
     public TaskModelBuilder Completed()
     {
-        _task.CompletedAt = DateTime.Now;
+        _task.CompletedAt = DateTime.UtcNow;
         return this;
     }
 
