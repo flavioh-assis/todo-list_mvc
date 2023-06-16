@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.App.Data.Context;
@@ -29,19 +30,27 @@ public class TaskServiceTests : IDisposable
 
         _dbContext = new TaskContextFactory()
             .CreateDbContext(Array.Empty<string>());
-        _dbContext.Database.EnsureCreated();
+
+        var isConnected = CheckDbConnection();
+        if (!isConnected)
+        {
+            throw new Exception("Failed to connect to database.");
+        }
 
         var taskRepository = new TaskRepository(_dbContext);
         _taskService = new TaskService(taskRepository);
 
         _task1Pending = taskBuilder.Pending().Build();
         _task2Completed = taskBuilder.Completed().Build();
+        var initialTasks = new List<TaskModel>
+        {
+            _task1Pending,
+            _task2Completed,
+        };
 
-        _dbContext.Add(_task1Pending);
-        _dbContext.Add(_task2Completed);
-        _dbContext.SaveChanges();
+        InsertTasks(initialTasks);
 
-        _totalTask = 2;
+        _totalTask = initialTasks.Count;
     }
 
     [Fact]
@@ -211,6 +220,33 @@ public class TaskServiceTests : IDisposable
         var allTasks = await _dbContext.Tasks.ToListAsync();
         allTasks.Should().NotContain(_task1Pending);
         allTasks.Should().Contain(_task2Completed);
+    }
+
+    private bool CheckDbConnection()
+    {
+        var startTime = DateTime.Now;
+        var timeout = TimeSpan.FromSeconds(10);
+
+        while (DateTime.Now - startTime < timeout)
+        {
+            try
+            {
+                _dbContext.Database.EnsureCreated();
+                return true;
+            }
+            catch
+            {
+                Thread.Sleep(500);
+            }
+        }
+
+        return false;
+    }
+
+    private void InsertTasks(List<TaskModel> tasks)
+    {
+        tasks.ForEach(task => _dbContext.Add(task));
+        _dbContext.SaveChanges();
     }
 
     public void Dispose()
