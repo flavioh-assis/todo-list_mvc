@@ -236,7 +236,7 @@ public class TaskServiceTests : IDisposable
             }
             catch
             {
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
             }
         }
 
