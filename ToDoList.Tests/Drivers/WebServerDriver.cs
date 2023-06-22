@@ -1,9 +1,6 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.FileProviders;
 using ToDoList.App;
 
 namespace ToDoList.Tests.Drivers;
@@ -20,37 +17,14 @@ public class WebServerDriver
 
     public void Start()
     {
-        var location = typeof(KestrelHostBuilder).Assembly.Location;
-        var applicationAssemblyPath = Path.GetDirectoryName(location);
+        var builder = new KestrelHostBuilder().CreateHostBuilder(Array.Empty<string>());
 
-        if (applicationAssemblyPath is null)
-            throw new Exception("Location of application assembly could not be found");
-
-        var webRoot = Path.Combine(applicationAssemblyPath, "..", "..", "..", "..",
-            "ToDoList.App", "wwwroot");
-
-        var hostBuilder = new KestrelHostBuilder();
-        var builder = hostBuilder.CreateHostBuilder(Array.Empty<string>(), webRoot);
-
-        builder.WebHost.ConfigureKestrel(options => { options.ListenAnyIP(Port); });
+        var startup = new Startup(builder.Configuration);
+        startup.ConfigureServices(builder.Services, "TestConnection");
 
         _host = builder.Build();
 
-        _host.UseStaticFiles(new StaticFileOptions
-        {
-            FileProvider = new PhysicalFileProvider(webRoot)
-        });
-
-        _host.UseStaticFiles();
-
-        _host.UseRouting();
-
-        _host.UseAuthorization();
-
-        _host.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Task}/{action=Index}/{id?}");
-
+        startup.Configure(_host, _host.Environment);
         _host.RunAsync($"http://localhost:{Port}").ConfigureAwait(false);
     }
 
