@@ -16,12 +16,12 @@ public class HomeTests : IDisposable
     private readonly TaskContext _dbContext;
     private readonly WebServerDriver _server;
 
-    private readonly int _serverPort;
+    private readonly string _serverUrl;
 
     public HomeTests()
     {
         _server = new WebServerDriver();
-        _serverPort = _server.Port;
+        _serverUrl = $"http://localhost:{_server.Port}";
 
         var options = new ChromeOptions
         {
@@ -43,12 +43,14 @@ public class HomeTests : IDisposable
     }
 
     [Fact]
-    public void Test()
+    public void WhenNavigateToHomePage_ShouldShowPageTitle()
     {
-        _driver.Navigate().GoToUrl($"http://localhost:{_serverPort}");
+        const string expectedTitle = "Tarefas Pendentes - Lista de Tarefas";
+
+        _driver.Navigate().GoToUrl(_serverUrl);
 
         var title = _driver.Title;
-        title.Should().Be("Tarefas Pendentes - Lista de Tarefas");
+        title.Should().Be(expectedTitle);
     }
 
     private bool CheckDbConnection()
