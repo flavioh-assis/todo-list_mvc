@@ -5,6 +5,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using ToDoList.App.Data.Context;
 using ToDoList.Tests.Drivers;
+using ToDoList.Tests.E2ETests.Pages;
 using ToDoList.Tests.Factories;
 using Xunit;
 
@@ -15,18 +16,18 @@ public class HomeTests : IDisposable
     private readonly IWebDriver _driver;
     private readonly TaskContext _dbContext;
     private readonly WebServerDriver _server;
-
-    private readonly string _serverUrl;
+    private readonly HomePage _page;
 
     public HomeTests()
     {
         _server = new WebServerDriver();
-        _serverUrl = $"http://localhost:{_server.Port}";
 
         var options = new ChromeOptions
         {
-            AcceptInsecureCertificates = true
+            AcceptInsecureCertificates = true,
         };
+        options.AddArgument("--headless=new");
+
         _driver = new ChromeDriver(options);
 
         _dbContext = new TaskContextFactory()
@@ -40,23 +41,73 @@ public class HomeTests : IDisposable
         }
 
         _server.Start();
+
+        _page = new HomePage(_driver);
+        var pageUrl = $"http://localhost:{_server.Port}{_page.Path}";
+
+        _driver.Navigate().GoToUrl(pageUrl);
     }
 
     [Fact]
-    public void WhenNavigateToHomePage_ShouldShowPageTitle()
+    public void ShouldDisplayPageTitleInBrowserTab()
     {
-        const string expectedTitle = "Tarefas Pendentes - Lista de Tarefas";
+        var expectedTitle = "Tarefas Pendentes - Lista de Tarefas";
 
-        _driver.Navigate().GoToUrl(_serverUrl);
+        var title = _page.Title();
 
-        var title = _driver.Title;
         title.Should().Be(expectedTitle);
+    }
+
+    [Fact]
+    public void ShouldDisplayNavigationBar()
+    {
+        var navbar = _page.GetNavigationBar();
+
+        navbar.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void ShouldDisplayThreeItemsIntoNavigationBar()
+    {
+        var expectedLength = 3;
+
+        var navbarItems = _page.GetNavigationItems();
+
+        navbarItems.Count.Should().Be(expectedLength);
+    }
+
+    [Fact]
+    public void ShouldDisplayCorrectItemsTextIntoNavigationBar()
+    {
+        var expectedFirstItemText = "Tarefas Pendentes";
+        var expectedSecondItemText = "Tarefas Concluídas";
+        var expectedThirdItemText = "Criar Nova Tarefa";
+
+        var navbarItems = _page.GetNavigationItems();
+        var firstItemText = navbarItems[navbarItems.Count - 3].Text;
+        var secondItemText = navbarItems[navbarItems.Count - 2].Text;
+        var thirdItemText = navbarItems[navbarItems.Count - 1].Text;
+
+        firstItemText.Should().Be(expectedFirstItemText);
+        secondItemText.Should().Be(expectedSecondItemText);
+        thirdItemText.Should().Be(expectedThirdItemText);
+    }
+
+    [Fact]
+    public void ShouldDisplayHeadingText()
+    {
+        var expectedHeadingText = "Pendentes";
+
+        var heading = _page.Heading();
+
+        heading.Text.Should().Be(expectedHeadingText);
     }
 
     private bool CheckDbConnection()
     {
         var startTime = DateTime.Now;
         var timeout = TimeSpan.FromSeconds(10);
+        var waitTime = 1000;
 
         while (DateTime.Now - startTime < timeout)
         {
@@ -67,7 +118,7 @@ public class HomeTests : IDisposable
             }
             catch
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(waitTime);
             }
         }
 
