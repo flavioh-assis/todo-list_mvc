@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using OpenQA.Selenium;
 
-namespace ToDoList.Tests.E2ETests.Pages;
+namespace ToDoList.Tests.Utils;
 
 public class SharedSelectors
 {
