@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using ToDoList.App;
@@ -17,7 +18,17 @@ public class WebServerDriver
 
     public void Start()
     {
-        var builder = new KestrelHostBuilder().CreateHostBuilder(Array.Empty<string>());
+        var location = typeof(KestrelHostBuilder).Assembly.Location;
+        var applicationAssemblyPath = Path.GetDirectoryName(location);
+
+        if (applicationAssemblyPath is null)
+            throw new Exception("Location of application assembly could not be found.");
+
+        var webRoot = Path.Combine(
+            applicationAssemblyPath, "..", "..", "..", "..", "ToDoList.App", "wwwroot"
+        );
+
+        var builder = new KestrelHostBuilder().CreateHostBuilder(Array.Empty<string>(), webRoot);
 
         var startup = new Startup(builder.Configuration);
         startup.ConfigureServices(builder.Services, "TestConnection");
