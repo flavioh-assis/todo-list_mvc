@@ -9,12 +9,8 @@ namespace ToDoList.Tests.Drivers;
 public class WebServerDriver
 {
     private WebApplication? _host;
-    public int Port { get; private set; }
-
-    public WebServerDriver()
-    {
-        GeneratePort();
-    }
+    private const int Port = 32000;
+    private const string BaseUrl = "http://localhost";
 
     public void Start()
     {
@@ -36,16 +32,11 @@ public class WebServerDriver
         _host = builder.Build();
 
         startup.Configure(_host, _host.Environment);
-        _host.RunAsync($"http://localhost:{Port}").ConfigureAwait(false);
+        _host.RunAsync($"{BaseUrl}:{Port}").ConfigureAwait(false);
     }
 
     public async Task Stop()
     {
         if (_host is not null) await _host.StopAsync();
-    }
-
-    private void GeneratePort()
-    {
-        Port = new Random().Next(5000, 32000);
     }
 }

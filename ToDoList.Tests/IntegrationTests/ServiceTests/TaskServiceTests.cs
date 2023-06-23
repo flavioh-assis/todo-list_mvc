@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.App.Data.Context;
@@ -9,6 +8,7 @@ using ToDoList.App.Repository;
 using ToDoList.App.Services;
 using ToDoList.Tests.Builders;
 using ToDoList.Tests.Factories;
+using ToDoList.Tests.Utils;
 using Xunit;
 
 namespace ToDoList.Tests.IntegrationTests.ServiceTests;
@@ -31,7 +31,7 @@ public class TaskServiceTests : IDisposable
         _dbContext = new TaskContextFactory()
             .CreateDbContext(Array.Empty<string>());
 
-        var isConnected = CheckDbConnection();
+        var isConnected = DbHelper.CheckDbConnection(_dbContext);
         if (!isConnected)
         {
             throw new Exception("Failed to connect to database.");
@@ -222,27 +222,6 @@ public class TaskServiceTests : IDisposable
         allTasks.Should().Contain(_task2Completed);
     }
 
-    private bool CheckDbConnection()
-    {
-        var startTime = DateTime.Now;
-        var timeout = TimeSpan.FromSeconds(10);
-
-        while (DateTime.Now - startTime < timeout)
-        {
-            try
-            {
-                _dbContext.Database.EnsureCreated();
-                return true;
-            }
-            catch
-            {
-                Thread.Sleep(1000);
-            }
-        }
-
-        return false;
-    }
-
     private void InsertTasks(List<TaskModel> tasks)
     {
         tasks.ForEach(task => _dbContext.Add(task));
@@ -251,7 +230,6 @@ public class TaskServiceTests : IDisposable
 
     public void Dispose()
     {
-        _dbContext.Database.EnsureDeleted();
-        _dbContext.Dispose();
+        DbHelper.Dispose(_dbContext);
     }
 }

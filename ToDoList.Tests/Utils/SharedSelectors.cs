@@ -3,11 +3,11 @@ using OpenQA.Selenium;
 
 namespace ToDoList.Tests.Utils;
 
-public class SharedSelectors
+public class SharedSelectors : BasePage
 {
     private readonly IWebDriver _driver;
 
-    protected SharedSelectors(IWebDriver driver)
+    protected SharedSelectors(IWebDriver driver) : base(driver)
     {
         _driver = driver;
     }

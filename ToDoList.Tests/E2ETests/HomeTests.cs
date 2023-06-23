@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using FluentAssertions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -7,6 +6,7 @@ using ToDoList.App.Data.Context;
 using ToDoList.Tests.Drivers;
 using ToDoList.Tests.E2ETests.Pages;
 using ToDoList.Tests.Factories;
+using ToDoList.Tests.Utils;
 using Xunit;
 
 namespace ToDoList.Tests.E2ETests;
@@ -22,18 +22,10 @@ public class HomeTests : IDisposable
     {
         _server = new WebServerDriver();
 
-        var options = new ChromeOptions
-        {
-            AcceptInsecureCertificates = true,
-        };
-        options.AddArgument("--headless=new");
-
-        _driver = new ChromeDriver(options);
-
         _dbContext = new TaskContextFactory()
             .CreateDbContext(Array.Empty<string>());
 
-        var isConnected = CheckDbConnection();
+        var isConnected = DbHelper.CheckDbConnection(_dbContext);
         if (!isConnected)
         {
             Dispose();
@@ -42,10 +34,15 @@ public class HomeTests : IDisposable
 
         _server.Start();
 
-        _page = new HomePage(_driver);
-        var pageUrl = $"http://localhost:{_server.Port}{_page.Path}";
+        var options = new ChromeOptions
+        {
+            AcceptInsecureCertificates = true,
+        };
+        options.AddArgument("--headless=new");
+        _driver = new ChromeDriver(options);
 
-        _driver.Navigate().GoToUrl(pageUrl);
+        _page = new HomePage(_driver);
+        _page.NavigateToHome();
     }
 
     [Fact]
@@ -103,32 +100,12 @@ public class HomeTests : IDisposable
         heading.Text.Should().Be(expectedHeadingText);
     }
 
-    private bool CheckDbConnection()
-    {
-        var startTime = DateTime.Now;
-        var timeout = TimeSpan.FromSeconds(10);
-        var waitTime = 1000;
-
-        while (DateTime.Now - startTime < timeout)
-        {
-            try
-            {
-                _dbContext.Database.EnsureCreated();
-                return true;
-            }
-            catch
-            {
-                Thread.Sleep(waitTime);
-            }
-        }
-
-        return false;
-    }
-
     public void Dispose()
     {
         _driver.Quit();
         _driver.Dispose();
+
+        DbHelper.Dispose(_dbContext);
 
         _server.Stop().Wait();
     }
