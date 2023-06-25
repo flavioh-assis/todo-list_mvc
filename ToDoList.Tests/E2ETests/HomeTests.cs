@@ -21,9 +21,10 @@ public class HomeTests : IDisposable
     public HomeTests()
     {
         _server = new WebServerDriver();
+        _server.Start("TestConnection");
 
         _dbContext = new TaskContextFactory()
-            .CreateDbContext(Array.Empty<string>());
+            .CreateDbContext(new[] { _server.TestConnectionString });
 
         var isConnected = DbHelper.CheckDbConnection(_dbContext);
         if (!isConnected)
@@ -31,8 +32,6 @@ public class HomeTests : IDisposable
             Dispose();
             throw new Exception("Failed to connect to database.");
         }
-
-        _server.Start();
 
         var options = new ChromeOptions
         {

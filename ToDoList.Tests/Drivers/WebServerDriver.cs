@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using ToDoList.App;
 
 namespace ToDoList.Tests.Drivers;
@@ -11,8 +12,14 @@ public class WebServerDriver
     private WebApplication? _host;
     private const int Port = 32000;
     private const string BaseUrl = "http://localhost";
+    public string TestConnectionString { get; private set; }
 
-    public void Start()
+    public WebServerDriver()
+    {
+        TestConnectionString = "";
+    }
+
+    public void Start(string connection)
     {
         var location = typeof(KestrelHostBuilder).Assembly.Location;
         var applicationAssemblyPath = Path.GetDirectoryName(location);
@@ -25,9 +32,10 @@ public class WebServerDriver
         );
 
         var builder = new KestrelHostBuilder().CreateHostBuilder(Array.Empty<string>(), webRoot);
+        TestConnectionString = builder.Configuration.GetConnectionString(connection);
 
         var startup = new Startup(builder.Configuration);
-        startup.ConfigureServices(builder.Services, "TestConnection");
+        startup.ConfigureServices(builder.Services, connection);
 
         _host = builder.Build();
 

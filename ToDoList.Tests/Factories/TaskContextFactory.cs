@@ -8,9 +8,11 @@ public class TaskContextFactory : IDesignTimeDbContextFactory<TaskContext>
 {
     public TaskContext CreateDbContext(string[] args)
     {
+        var connectionString = args[0];
+
         var optionsBuilder = new DbContextOptionsBuilder<TaskContext>();
         optionsBuilder.UseSqlServer(
-            "Server=localhost,1450;Database=db_todo_test;User ID=sa;Password=SqlServer2017!;TrustServerCertificate=True;"
+            connectionString
         );
 
         return new TaskContext(optionsBuilder.Options);
