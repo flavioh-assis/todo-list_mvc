@@ -4,7 +4,7 @@ namespace ToDoList.App
     {
         public static void Main(string[] args)
         {
-            var builder = new KestrelHostBuilder().CreateHostBuilder(args);
+            var builder = KestrelHostBuilder.CreateHostBuilder(args);
 
             var startup = new Startup(builder.Configuration);
             startup.ConfigureServices(builder.Services);

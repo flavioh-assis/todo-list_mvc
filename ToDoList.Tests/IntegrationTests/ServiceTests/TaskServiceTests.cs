@@ -7,6 +7,7 @@ using ToDoList.App.Models;
 using ToDoList.App.Repository;
 using ToDoList.App.Services;
 using ToDoList.Tests.Builders;
+using ToDoList.Tests.Drivers;
 using ToDoList.Tests.Factories;
 using ToDoList.Tests.Utils;
 using Xunit;
@@ -28,8 +29,11 @@ public class TaskServiceTests : IDisposable
         var taskBuilder = new TaskModelBuilder();
         _taskViewModelBuilder = new TaskViewModelBuilder();
 
+        var server = new WebServerDriver();
+        server.Start("TestConnection");
+
         _dbContext = new TaskContextFactory()
-            .CreateDbContext(Array.Empty<string>());
+            .CreateDbContext(new[] { server.TestConnectionString });
 
         var isConnected = DbHelper.CheckDbConnection(_dbContext);
         if (!isConnected)

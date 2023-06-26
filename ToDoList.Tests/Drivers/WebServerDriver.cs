@@ -31,7 +31,7 @@ public class WebServerDriver
             applicationAssemblyPath, "..", "..", "..", "..", "ToDoList.App", "wwwroot"
         );
 
-        var builder = new KestrelHostBuilder().CreateHostBuilder(Array.Empty<string>(), webRoot);
+        var builder = KestrelHostBuilder.CreateHostBuilder(new[] { webRoot });
         TestConnectionString = builder.Configuration.GetConnectionString(connection);
 
         var startup = new Startup(builder.Configuration);
