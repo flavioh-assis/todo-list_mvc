@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ToDoList.App.Models;
 
 namespace ToDoList.Tests.Utils;
 
@@ -32,5 +35,11 @@ public abstract class DbHelper
     {
         dbContext.Database.EnsureDeleted();
         dbContext.Dispose();
+    }
+
+    public static async Task InsertTasks(DbContext dbContext, List<TaskModel> tasks)
+    {
+        tasks.ForEach(task => dbContext.Add(task));
+        await dbContext.SaveChangesAsync();
     }
 }

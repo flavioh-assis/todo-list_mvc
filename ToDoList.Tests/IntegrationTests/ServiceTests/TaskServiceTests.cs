@@ -52,7 +52,7 @@ public class TaskServiceTests : IDisposable
             _task2Completed,
         };
 
-        InsertTasks(initialTasks);
+        DbHelper.InsertTasks(_dbContext, initialTasks).Wait();
 
         _totalTask = initialTasks.Count;
     }
@@ -224,12 +224,6 @@ public class TaskServiceTests : IDisposable
         var allTasks = await _dbContext.Tasks.ToListAsync();
         allTasks.Should().NotContain(_task1Pending);
         allTasks.Should().Contain(_task2Completed);
-    }
-
-    private void InsertTasks(List<TaskModel> tasks)
-    {
-        tasks.ForEach(task => _dbContext.Add(task));
-        _dbContext.SaveChanges();
     }
 
     public void Dispose()
