@@ -10,12 +10,14 @@ namespace ToDoList.Tests.Drivers;
 public class WebServerDriver
 {
     private WebApplication? _host;
-    private const int Port = 32000;
-    private const string BaseUrl = "http://localhost";
+    public int Port { get; }
+    public string BaseUrl { get; }
     public string TestConnectionString { get; private set; }
 
     public WebServerDriver()
     {
+        BaseUrl = "http://localhost";
+        Port = 32000;
         TestConnectionString = "";
     }
 
