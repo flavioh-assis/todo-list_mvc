@@ -10,14 +10,24 @@ namespace ToDoList.App
 {
     public class Startup
     {
-        private readonly IConfiguration _configuration;
+        public readonly string ConnectionString;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, string testDatabase = null)
         {
-            _configuration = configuration;
+            var defaultConString = configuration.GetConnectionString("DefaultConnection");
+
+            if (testDatabase == null)
+            {
+                ConnectionString = defaultConString;
+            }
+            else
+            {
+                var testConnectionString = ReplaceString(defaultConString, testDatabase);
+                ConnectionString = testConnectionString;
+            }
         }
 
-        public void ConfigureServices(IServiceCollection services, string connectionString = null)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             services.AddScoped(typeof(ITaskService), typeof(TaskService));
@@ -25,8 +35,7 @@ namespace ToDoList.App
 
             services.AddControllersWithViews();
             services.AddDbContext<TaskContext>(
-                opt =>
-                    opt.UseSqlServer(_configuration.GetConnectionString(connectionString ?? "DefaultConnection"))
+                opt => opt.UseSqlServer(ConnectionString)
             );
             services.AddScoped<ITaskContext, TaskContext>();
             services.AddTransient<ITaskRepository, TaskRepository>();
@@ -47,6 +56,13 @@ namespace ToDoList.App
             {
                 endpoints.MapControllerRoute(name: "default", pattern: "{controller=Task}/{action=Index}/{id?}");
             });
+        }
+
+        private string ReplaceString(string originalString, string testDatabase)
+        {
+            var defaultDatabase = "db_todo";
+
+            return $"{originalString.Replace(defaultDatabase, testDatabase)}";
         }
     }
 }

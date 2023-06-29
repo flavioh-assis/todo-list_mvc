@@ -26,12 +26,14 @@ public class HomeTests : IDisposable
     private readonly TaskModel _task2Pending;
     private readonly int _totalPendingTask;
 
+    private const string TestDatabase = "db_e2e_home_tests";
+
     public HomeTests()
     {
         var taskBuilder = new TaskModelBuilder();
 
         _server = new WebServerDriver();
-        _server.Start("TestConnection");
+        _server.Start(TestDatabase);
         _serverUrl = $"{_server.BaseUrl}:{_server.Port}";
 
         _dbContext = new TaskContextFactory()

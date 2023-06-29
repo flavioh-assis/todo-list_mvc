@@ -21,7 +21,7 @@ public class WebServerDriver
         TestConnectionString = "";
     }
 
-    public void Start(string connection)
+    public void Start(string testDatabase)
     {
         var location = typeof(KestrelHostBuilder).Assembly.Location;
         var applicationAssemblyPath = Path.GetDirectoryName(location);
@@ -34,10 +34,10 @@ public class WebServerDriver
         );
 
         var builder = KestrelHostBuilder.CreateHostBuilder(new[] { webRoot });
-        TestConnectionString = builder.Configuration.GetConnectionString(connection);
 
-        var startup = new Startup(builder.Configuration);
-        startup.ConfigureServices(builder.Services, connection);
+        var startup = new Startup(builder.Configuration, testDatabase);
+        startup.ConfigureServices(builder.Services);
+        TestConnectionString = startup.ConnectionString;
 
         _host = builder.Build();
 

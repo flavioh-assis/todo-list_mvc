@@ -24,13 +24,15 @@ public class TaskServiceTests : IDisposable
     private readonly TaskModel _task2Completed;
     private readonly int _totalTask;
 
+    private const string TestDatabase = "db_task_service_tests";
+
     public TaskServiceTests()
     {
         var taskBuilder = new TaskModelBuilder();
         _taskViewModelBuilder = new TaskViewModelBuilder();
 
         var server = new WebServerDriver();
-        server.Start("TestConnection");
+        server.Start(TestDatabase);
 
         _dbContext = new TaskContextFactory()
             .CreateDbContext(new[] { server.TestConnectionString });
