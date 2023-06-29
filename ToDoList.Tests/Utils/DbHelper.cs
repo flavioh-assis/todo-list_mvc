@@ -15,6 +15,8 @@ public abstract class DbHelper
         var timeout = TimeSpan.FromSeconds(10);
         var waitTime = 1000;
 
+        dbContext.Database.EnsureDeleted();
+
         while (DateTime.Now - startTime < timeout)
         {
             try
