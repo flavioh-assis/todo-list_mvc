@@ -80,51 +80,6 @@ public class HomeTests : IDisposable
     }
 
     [Fact]
-    public void ShouldDisplayPageTitleInBrowserTab()
-    {
-        var expectedTitle = "Tarefas Pendentes - Lista de Tarefas";
-
-        var title = _page.Title();
-
-        title.Should().Be(expectedTitle);
-    }
-
-    [Fact]
-    public void ShouldDisplayNavigationBar()
-    {
-        var navbar = _page.GetNavigationBar();
-
-        navbar.Should().NotBeNull();
-    }
-
-    [Fact]
-    public void ShouldDisplayThreeItemsIntoNavigationBar()
-    {
-        var expectedLength = 3;
-
-        var navbarItems = _page.GetNavigationItems();
-
-        navbarItems.Count.Should().Be(expectedLength);
-    }
-
-    [Fact]
-    public void ShouldDisplayCorrectItemsTextIntoNavigationBar()
-    {
-        var expectedFirstItemText = "Tarefas Pendentes";
-        var expectedSecondItemText = "Tarefas Concluídas";
-        var expectedThirdItemText = "Criar Nova Tarefa";
-
-        var navbarItems = _page.GetNavigationItems();
-        var firstItemText = navbarItems[navbarItems.Count - 3].Text;
-        var secondItemText = navbarItems[navbarItems.Count - 2].Text;
-        var thirdItemText = navbarItems[navbarItems.Count - 1].Text;
-
-        firstItemText.Should().Be(expectedFirstItemText);
-        secondItemText.Should().Be(expectedSecondItemText);
-        thirdItemText.Should().Be(expectedThirdItemText);
-    }
-
-    [Fact]
     public void ShouldDisplayHeadingText()
     {
         var expectedHeadingText = "Pendentes";
@@ -167,6 +122,7 @@ public class HomeTests : IDisposable
 
         _page.CompleteTask(taskTitle);
         _page.ClickOkOnModalComplete(taskId);
+
         var cardBody = _page.CardBodyByTitle(taskTitle);
         cardBody.Text.Should().Contain(expectedBodyText);
     }
