@@ -20,24 +20,23 @@ public class SharedSelectors : BasePage
         _wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(WaitTimeInSeconds));
     }
 
-    public IWebElement GetNavigationBar()
+    public IWebElement NavigationBar()
     {
-        return _driver.FindElement(By.TagName("nav"));
+        return _wait.Until(ExpectedConditions.ElementIsVisible(By.TagName("nav")));
     }
 
-    public IList<IWebElement> GetNavigationItems()
+    public void SelectNavOption(string optionText)
     {
-        return _driver.FindElements(By.XPath("//header//nav//ul/li"));
+        var navBar = NavigationBar();
+
+        _wait.Until(ExpectedConditions.ElementToBeClickable(
+            navBar.FindElement(By.XPath($".//a[contains(text(), '{optionText}')]")))
+        ).Click();
     }
 
     public IWebElement Heading()
     {
         return _driver.FindElement(By.TagName("h1"));
-    }
-
-    public string Title()
-    {
-        return _driver.Title;
     }
 
     public IList<IWebElement> Cards()

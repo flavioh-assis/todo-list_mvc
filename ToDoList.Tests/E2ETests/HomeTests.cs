@@ -80,6 +80,39 @@ public class HomeTests : IDisposable
     }
 
     [Fact]
+    public void WhenOptionPendingIsClickedOnNavigationBar_ShouldRedirectToPagePending()
+    {
+        var expectedUrl = $"{_serverUrl}/";
+
+        _page.SelectNavOption("Pendentes");
+
+        var currentUrl = _page.CurrentUrl();
+        currentUrl.Should().Be(expectedUrl);
+    }
+
+    [Fact]
+    public void WhenOptionCompletedIsClickedOnNavigationBar_ShouldRedirectToPageCompleted()
+    {
+        var expectedUrl = $"{_serverUrl}/Task/Completed";
+
+        _page.SelectNavOption("Concluídas");
+
+        var currentUrl = _page.CurrentUrl();
+        currentUrl.Should().Be(expectedUrl);
+    }
+
+    [Fact]
+    public void WhenOptionNewTaskIsClickedOnNavigationBar_ShouldRedirectToPageNewTask()
+    {
+        var expectedUrl = $"{_serverUrl}/Task/Create";
+
+        _page.SelectNavOption("Criar");
+
+        var currentUrl = _page.CurrentUrl();
+        currentUrl.Should().Be(expectedUrl);
+    }
+
+    [Fact]
     public void ShouldDisplayHeadingText()
     {
         var expectedHeadingText = "Pendentes";
