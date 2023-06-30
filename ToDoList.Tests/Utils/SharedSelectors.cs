@@ -92,6 +92,12 @@ public class SharedSelectors : BasePage
         ClickButtonOnElement(modalComplete, "Confirmar");
     }
 
+    public void ClickCancelOnModalComplete(int taskId)
+    {
+        var modalComplete = ModalComplete(taskId);
+        ClickButtonOnElement(modalComplete, "Cancelar");
+    }
+
     public void EditTask(string taskTitle)
     {
         var card = CardByTitle(taskTitle);
@@ -115,6 +121,12 @@ public class SharedSelectors : BasePage
     {
         var modalDelete = ModalDelete(taskId);
         ClickButtonOnElement(modalDelete, "Confirmar");
+    }
+
+    public void ClickCancelOnModalDelete(int taskId)
+    {
+        var modalDelete = ModalDelete(taskId);
+        ClickButtonOnElement(modalDelete, "Cancelar");
     }
 
     public string CurrentUrl()

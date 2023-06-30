@@ -161,6 +161,20 @@ public class HomeTests : IDisposable
     }
 
     [Fact]
+    public void WhenAbortingCompletingTask_ShouldNotRedirect()
+    {
+        var taskId = _task1Pending.Id;
+        var taskTitle = _task1Pending.Title;
+        var expectedUrl = $"{_serverUrl}/Task/Index";
+
+        _page.CompleteTask(taskTitle);
+        _page.ClickCancelOnModalComplete(taskId);
+
+        var currentUrl = _page.CurrentUrl();
+        currentUrl.Should().Be(expectedUrl);
+    }
+
+    [Fact]
     public void WhenEditingTask_ShouldRedirectToPageEdit()
     {
         var taskId = _task2Pending.Id;
@@ -185,6 +199,20 @@ public class HomeTests : IDisposable
 
         var taskCardsElements = _page.Cards();
         taskCardsElements.Count.Should().Be(expectedLength);
+    }
+
+    [Fact]
+    public void WhenAbortingDeletingTask_ShouldNotRedirect()
+    {
+        var taskId = _task1Pending.Id;
+        var taskTitle = _task1Pending.Title;
+        var expectedUrl = $"{_serverUrl}/Task/Index";
+
+        _page.DeleteTask(taskTitle);
+        _page.ClickCancelOnModalDelete(taskId);
+
+        var currentUrl = _page.CurrentUrl();
+        currentUrl.Should().Be(expectedUrl);
     }
 
     public void Dispose()
