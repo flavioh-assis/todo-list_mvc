@@ -100,7 +100,7 @@ public class HomeTests : IDisposable
     }
 
     [Fact]
-    public void WhenTaskIsCompleted_ShouldRedirectToPageCompleted()
+    public void WhenCompletingTask_ShouldRedirectToPageCompleted()
     {
         var taskId = _task1Pending.Id;
         var taskTitle = _task1Pending.Title;
@@ -114,7 +114,7 @@ public class HomeTests : IDisposable
     }
 
     [Fact]
-    public void WhenTaskIsCompleted_ShouldChangeStatusToCompleted()
+    public void WhenCompletingTask_ShouldChangeStatusToCompleted()
     {
         var taskId = _task2Pending.Id;
         var taskTitle = _task2Pending.Title;
@@ -128,7 +128,20 @@ public class HomeTests : IDisposable
     }
 
     [Fact]
-    public void WhenTaskIsDeleted_ShouldNotDisplayRemovedTask()
+    public void WhenEditingTask_ShouldRedirectToPageEdit()
+    {
+        var taskId = _task2Pending.Id;
+        var taskTitle = _task2Pending.Title;
+        var expectedUrl = $"{_serverUrl}/Task/Edit/{taskId}";
+
+        _page.EditTask(taskTitle);
+
+        var currentUrl = _page.CurrentUrl();
+        currentUrl.Should().Be(expectedUrl);
+    }
+
+    [Fact]
+    public void WhenDeletingTask_ShouldNotDisplayRemovedTask()
     {
         var taskId = _task1Pending.Id;
         var taskTitle = _task1Pending.Title;

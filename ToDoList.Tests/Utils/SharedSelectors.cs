@@ -93,6 +93,13 @@ public class SharedSelectors : BasePage
         ClickButtonOnElement(modalComplete, "Confirmar");
     }
 
+    public void EditTask(string taskTitle)
+    {
+        var card = CardByTitle(taskTitle);
+
+        ClickButtonOnElement(card, "Editar");
+    }
+
     public void DeleteTask(string taskTitle)
     {
         var card = CardByTitle(taskTitle);
