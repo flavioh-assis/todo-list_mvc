@@ -127,6 +127,20 @@ public class HomeTests : IDisposable
         cardBody.Text.Should().Contain(expectedBodyText);
     }
 
+    [Fact]
+    public void WhenTaskIsDeleted_ShouldNotDisplayRemovedTask()
+    {
+        var taskId = _task1Pending.Id;
+        var taskTitle = _task1Pending.Title;
+        var expectedLength = _totalPendingTask - 1;
+
+        _page.DeleteTask(taskTitle);
+        _page.ClickOkOnModalDelete(taskId);
+
+        var taskCardsElements = _page.Cards();
+        taskCardsElements.Count.Should().Be(expectedLength);
+    }
+
     public void Dispose()
     {
         _driver?.Quit();
