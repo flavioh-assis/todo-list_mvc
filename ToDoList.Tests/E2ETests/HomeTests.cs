@@ -84,7 +84,7 @@ public class HomeTests : IDisposable
     {
         var expectedUrl = $"{_serverUrl}/";
 
-        _page.SelectNavOption("Pendentes");
+        _page.SelectPendingItemOnNavigationBar();
 
         var currentUrl = _page.CurrentUrl();
         currentUrl.Should().Be(expectedUrl);
@@ -95,7 +95,7 @@ public class HomeTests : IDisposable
     {
         var expectedUrl = $"{_serverUrl}/Task/Completed";
 
-        _page.SelectNavOption("Concluídas");
+        _page.SelectCompletedItemOnNavigationBar();
 
         var currentUrl = _page.CurrentUrl();
         currentUrl.Should().Be(expectedUrl);
@@ -106,7 +106,7 @@ public class HomeTests : IDisposable
     {
         var expectedUrl = $"{_serverUrl}/Task/Create";
 
-        _page.SelectNavOption("Criar");
+        _page.SelectCreateNewTaskItemOnNavigationBar();
 
         var currentUrl = _page.CurrentUrl();
         currentUrl.Should().Be(expectedUrl);

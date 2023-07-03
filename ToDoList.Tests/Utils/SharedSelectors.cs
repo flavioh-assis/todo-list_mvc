@@ -20,18 +20,40 @@ public class SharedSelectors : BasePage
         _wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(WaitTimeInSeconds));
     }
 
-    public IWebElement NavigationBar()
+    private IWebElement NavigationItem(string itemText)
     {
-        return _wait.Until(ExpectedConditions.ElementIsVisible(By.TagName("nav")));
+        var itemSelector = By.XPath($"//nav//a[contains(text(), '{itemText}')]");
+
+        return WaitToBeClickable(itemSelector);
     }
 
-    public void SelectNavOption(string optionText)
+    private IWebElement WaitToBeClickable(By by)
     {
-        var navBar = NavigationBar();
+        return _wait.Until(ExpectedConditions.ElementToBeClickable(by));
+    }
 
-        _wait.Until(ExpectedConditions.ElementToBeClickable(
-            navBar.FindElement(By.XPath($".//a[contains(text(), '{optionText}')]")))
-        ).Click();
+    public void SelectPendingItemOnNavigationBar()
+    {
+        var itemSubString = "Pendentes";
+
+        var itemPending = NavigationItem(itemSubString);
+        itemPending.Click();
+    }
+
+    public void SelectCompletedItemOnNavigationBar()
+    {
+        var optionSubString = "Concluídas";
+
+        var optionCompleted = NavigationItem(optionSubString);
+        optionCompleted.Click();
+    }
+
+    public void SelectCreateNewTaskItemOnNavigationBar()
+    {
+        var optionSubString = "Criar";
+
+        var optionCreateNewTask = NavigationItem(optionSubString);
+        optionCreateNewTask.Click();
     }
 
     public IWebElement Heading()
