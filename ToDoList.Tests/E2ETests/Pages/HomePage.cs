@@ -28,31 +28,19 @@ public class HomePage : SharedSelectors
         return $"//form[@id='complete-{taskId}']";
     }
 
-    private IWebElement ButtonCompleteOnCard(string taskTitle)
+    private string GetModalDeleteSelectorString(int taskId)
     {
-        var selector = By.XPath(
-            $"{GetCardSelectorString(taskTitle)}{GetButtonSelectorString("Concluir")}"
-        );
-
-        return WaitToBeClickable(selector);
+        return $"//form[@id='delete-{taskId}']";
     }
 
-    private IWebElement ButtonDeleteOnCard(string taskTitle)
+    private IWebElement ButtonOnCard(string buttonText, string taskTitle)
     {
-        var selector = By.XPath(
-            $"{GetCardSelectorString(taskTitle)}{GetButtonSelectorString("Excluir")}"
+        var cardSelector = GetCardSelectorString(taskTitle);
+        var buttonCompleteSelector = GetButtonSelectorString(buttonText);
+
+        return WaitToBeClickable(By.XPath(
+            $"{cardSelector}{buttonCompleteSelector}")
         );
-
-        return WaitToBeClickable(selector);
-    }
-
-    private IWebElement ButtonEditOnCard(string taskTitle)
-    {
-        var selector = By.XPath(
-            $"{GetCardSelectorString(taskTitle)}{GetButtonSelectorString("Editar")}"
-        );
-
-        return WaitToBeClickable(selector);
     }
 
     private IWebElement ButtonOnModalComplete(int taskId, string buttonText)
@@ -64,21 +52,40 @@ public class HomePage : SharedSelectors
         return WaitToBeClickable(buttonSelector);
     }
 
+    private IWebElement ButtonOnModalDelete(int taskId, string buttonText)
+    {
+        var buttonSelector = By.XPath(
+            $"{GetModalDeleteSelectorString(taskId)}{GetButtonSelectorString(buttonText)}"
+        );
+
+        return WaitToBeClickable(buttonSelector);
+    }
+
+    public IWebElement CardBody(string taskTitle)
+    {
+        var cardSelector = GetCardSelectorString(taskTitle);
+        var cardBodySelector = GetCardBodySelectorString();
+
+        return WaitToBeVisible(By.XPath(
+            $"{cardSelector}{cardBodySelector}")
+        );
+    }
+
     public void ClickToCompleteTask(string taskTitle)
     {
-        var buttonComplete = ButtonCompleteOnCard(taskTitle);
+        var buttonComplete = ButtonOnCard("Concluir", taskTitle);
         buttonComplete.Click();
     }
 
     public void ClickToDeleteTask(string taskTitle)
     {
-        var buttonDelete = ButtonDeleteOnCard(taskTitle);
+        var buttonDelete = ButtonOnCard("Excluir", taskTitle);
         buttonDelete.Click();
     }
 
     public void ClickToEditTask(string taskTitle)
     {
-        var buttonEdit = ButtonEditOnCard(taskTitle);
+        var buttonEdit = ButtonOnCard("Editar", taskTitle);
         buttonEdit.Click();
     }
 
@@ -91,6 +98,18 @@ public class HomePage : SharedSelectors
     public void ClickCancelOnModalComplete(int taskId)
     {
         var cancelButton = ButtonOnModalComplete(taskId, "Cancelar");
+        cancelButton.Click();
+    }
+
+    public void ClickOkOnModalDelete(int taskId)
+    {
+        var okButton = ButtonOnModalDelete(taskId, "Confirmar");
+        okButton.Click();
+    }
+
+    public void ClickCancelOnModalDelete(int taskId)
+    {
+        var cancelButton = ButtonOnModalDelete(taskId, "Cancelar");
         cancelButton.Click();
     }
 }

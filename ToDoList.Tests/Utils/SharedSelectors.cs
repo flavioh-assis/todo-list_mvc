@@ -30,6 +30,16 @@ public class SharedSelectors : BasePage
         return _wait.Until(ExpectedConditions.ElementToBeClickable(by));
     }
 
+    protected IWebElement WaitToBeVisible(By by)
+    {
+        return _wait.Until(ExpectedConditions.ElementIsVisible(by));
+    }
+
+    protected string GetCardBodySelectorString()
+    {
+        return "//div[contains(@class, 'card-body')]";
+    }
+
     public void SelectPendingItemOnNavigationBar()
     {
         var itemSubString = "Pendentes";
@@ -40,23 +50,23 @@ public class SharedSelectors : BasePage
 
     public void SelectCompletedItemOnNavigationBar()
     {
-        var optionSubString = "Concluídas";
+        var itemSubString = "Concluídas";
 
-        var optionCompleted = NavigationItem(optionSubString);
+        var optionCompleted = NavigationItem(itemSubString);
         optionCompleted.Click();
     }
 
     public void SelectCreateNewTaskItemOnNavigationBar()
     {
-        var optionSubString = "Criar";
+        var itemSubString = "Criar";
 
-        var optionCreateNewTask = NavigationItem(optionSubString);
+        var optionCreateNewTask = NavigationItem(itemSubString);
         optionCreateNewTask.Click();
     }
 
     public IWebElement Heading()
     {
-        return _driver.FindElement(By.TagName("h1"));
+        return WaitToBeVisible(By.TagName("h1"));
     }
 
     public IList<IWebElement> Cards()
@@ -64,68 +74,8 @@ public class SharedSelectors : BasePage
         return _driver.FindElements(By.ClassName("card"));
     }
 
-    public IWebElement CardByTitle(string taskTitle)
-    {
-        var cardXPath = "div[contains(@class, 'card')]";
-        var cardSelector = By.XPath(
-            $"//{cardXPath}//h5[text()='{taskTitle}']/ancestor::{cardXPath}"
-        );
-
-        return WaitToBeVisible(cardSelector);
-    }
-
-    public IWebElement CardBody(IWebElement card)
-    {
-        return card.FindElement(By.ClassName("card-body"));
-    }
-
-    public IWebElement CardBodyByTitle(string taskTitle)
-    {
-        var card = CardByTitle(taskTitle);
-
-        return CardBody(card);
-    }
-
-    public void ClickButtonOnElement(IWebElement element, string buttonText)
-    {
-        var button = element.FindElement(
-            By.XPath($".//button[text()='{buttonText}']")
-        );
-
-        WaitToBeClickable(button);
-
-        button.Click();
-    }
-
-    public IWebElement ModalDelete(int taskId)
-    {
-        return _driver.FindElement(By.Id($"delete-{taskId}"));
-    }
-
-    public void ClickOkOnModalDelete(int taskId)
-    {
-        var modalDelete = ModalDelete(taskId);
-        ClickButtonOnElement(modalDelete, "Confirmar");
-    }
-
-    public void ClickCancelOnModalDelete(int taskId)
-    {
-        var modalDelete = ModalDelete(taskId);
-        ClickButtonOnElement(modalDelete, "Cancelar");
-    }
-
     public string CurrentUrl()
     {
         return _driver.Url;
-    }
-
-    private IWebElement WaitToBeClickable(IWebElement element)
-    {
-        return _wait.Until(ExpectedConditions.ElementToBeClickable(element));
-    }
-
-    protected IWebElement WaitToBeVisible(By by)
-    {
-        return _wait.Until(ExpectedConditions.ElementIsVisible(by));
     }
 }

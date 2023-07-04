@@ -156,7 +156,7 @@ public class HomeTests : IDisposable
         _page.ClickToCompleteTask(taskTitle);
         _page.ClickOkOnModalComplete(taskId);
 
-        var cardBody = _page.CardBodyByTitle(taskTitle);
+        var cardBody = _page.CardBody(taskTitle);
         cardBody.Text.Should().Contain(expectedBodyText);
     }
 
