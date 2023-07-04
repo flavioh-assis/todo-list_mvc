@@ -13,28 +13,19 @@ public class HomePage : SharedSelectors
         _driver = driver;
     }
 
-    private string GetCardSelectorString(string taskTitle)
-    {
-        return $"//{CardXPath}//h5[text()='{taskTitle}']/ancestor::{CardXPath}";
-    }
-
     private string GetButtonSelectorString(string buttonText)
     {
         return $"//button[text()='{buttonText}']";
     }
 
+    private string GetCardSelectorString(string taskTitle)
+    {
+        return $"//{CardXPath}//h5[text()='{taskTitle}']/ancestor::{CardXPath}";
+    }
+
     private string GetModalCompleteSelectorString(int taskId)
     {
         return $"//form[@id='complete-{taskId}']";
-    }
-
-    private IWebElement ButtonOnModalComplete(int taskId, string buttonText)
-    {
-        var buttonSelector = By.XPath(
-            $"{GetModalCompleteSelectorString(taskId)}{GetButtonSelectorString(buttonText)}"
-        );
-
-        return WaitToBeClickable(buttonSelector);
     }
 
     private IWebElement ButtonCompleteOnCard(string taskTitle)
@@ -46,10 +37,34 @@ public class HomePage : SharedSelectors
         return WaitToBeClickable(selector);
     }
 
+    private IWebElement ButtonEditOnCard(string taskTitle)
+    {
+        var selector = By.XPath(
+            $"{GetCardSelectorString(taskTitle)}{GetButtonSelectorString("Editar")}"
+        );
+
+        return WaitToBeClickable(selector);
+    }
+
+    private IWebElement ButtonOnModalComplete(int taskId, string buttonText)
+    {
+        var buttonSelector = By.XPath(
+            $"{GetModalCompleteSelectorString(taskId)}{GetButtonSelectorString(buttonText)}"
+        );
+
+        return WaitToBeClickable(buttonSelector);
+    }
+
     public void ClickToCompleteTask(string taskTitle)
     {
         var buttonComplete = ButtonCompleteOnCard(taskTitle);
         buttonComplete.Click();
+    }
+
+    public void ClickToEditTask(string taskTitle)
+    {
+        var buttonEdit = ButtonEditOnCard(taskTitle);
+        buttonEdit.Click();
     }
 
     public void ClickOkOnModalComplete(int taskId)

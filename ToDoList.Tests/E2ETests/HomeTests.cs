@@ -181,7 +181,7 @@ public class HomeTests : IDisposable
         var taskTitle = _task2Pending.Title;
         var expectedUrl = $"{_serverUrl}/Task/Edit/{taskId}";
 
-        _page.EditTask(taskTitle);
+        _page.ClickToEditTask(taskTitle);
 
         var currentUrl = _page.CurrentUrl();
         currentUrl.Should().Be(expectedUrl);

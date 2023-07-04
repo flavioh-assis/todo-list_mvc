@@ -97,13 +97,6 @@ public class SharedSelectors : BasePage
         button.Click();
     }
 
-    public void EditTask(string taskTitle)
-    {
-        var card = CardByTitle(taskTitle);
-
-        ClickButtonOnElement(card, "Editar");
-    }
-
     public void DeleteTask(string taskTitle)
     {
         var card = CardByTitle(taskTitle);
