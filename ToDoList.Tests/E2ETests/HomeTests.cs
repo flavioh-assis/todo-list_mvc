@@ -139,7 +139,7 @@ public class HomeTests : IDisposable
         var taskTitle = _task1Pending.Title;
         var expectedUrl = $"{_serverUrl}/Task/Completed";
 
-        _page.CompleteTask(taskTitle);
+        _page.ClickToCompleteTask(taskTitle);
         _page.ClickOkOnModalComplete(taskId);
 
         var currentUrl = _page.CurrentUrl();
@@ -153,7 +153,7 @@ public class HomeTests : IDisposable
         var taskTitle = _task2Pending.Title;
         var expectedBodyText = "Status: Concluída";
 
-        _page.CompleteTask(taskTitle);
+        _page.ClickToCompleteTask(taskTitle);
         _page.ClickOkOnModalComplete(taskId);
 
         var cardBody = _page.CardBodyByTitle(taskTitle);
@@ -167,7 +167,7 @@ public class HomeTests : IDisposable
         var taskTitle = _task1Pending.Title;
         var expectedUrl = $"{_serverUrl}/Task/Index";
 
-        _page.CompleteTask(taskTitle);
+        _page.ClickToCompleteTask(taskTitle);
         _page.ClickCancelOnModalComplete(taskId);
 
         var currentUrl = _page.CurrentUrl();

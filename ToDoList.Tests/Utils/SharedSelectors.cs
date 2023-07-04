@@ -12,8 +12,6 @@ public class SharedSelectors : BasePage
     private const int WaitTimeInSeconds = 10;
     private readonly WebDriverWait _wait;
 
-    private const string CardXPath = "div[contains(@class, 'card')]";
-
     protected SharedSelectors(IWebDriver driver) : base(driver)
     {
         _driver = driver;
@@ -27,7 +25,7 @@ public class SharedSelectors : BasePage
         return WaitToBeClickable(itemSelector);
     }
 
-    private IWebElement WaitToBeClickable(By by)
+    protected IWebElement WaitToBeClickable(By by)
     {
         return _wait.Until(ExpectedConditions.ElementToBeClickable(by));
     }
@@ -68,9 +66,12 @@ public class SharedSelectors : BasePage
 
     public IWebElement CardByTitle(string taskTitle)
     {
-        return _driver.FindElement(
-            By.XPath($"//{CardXPath}//h5[text()='{taskTitle}']/ancestor::{CardXPath}")
+        var cardXPath = "div[contains(@class, 'card')]";
+        var cardSelector = By.XPath(
+            $"//{cardXPath}//h5[text()='{taskTitle}']/ancestor::{cardXPath}"
         );
+
+        return WaitToBeVisible(cardSelector);
     }
 
     public IWebElement CardBody(IWebElement card)
@@ -94,30 +95,6 @@ public class SharedSelectors : BasePage
         WaitToBeClickable(button);
 
         button.Click();
-    }
-
-    public void CompleteTask(string taskTitle)
-    {
-        var card = CardByTitle(taskTitle);
-
-        ClickButtonOnElement(card, "Concluir");
-    }
-
-    public IWebElement ModalComplete(int taskId)
-    {
-        return _driver.FindElement(By.Id($"complete-{taskId}"));
-    }
-
-    public void ClickOkOnModalComplete(int taskId)
-    {
-        var modalComplete = ModalComplete(taskId);
-        ClickButtonOnElement(modalComplete, "Confirmar");
-    }
-
-    public void ClickCancelOnModalComplete(int taskId)
-    {
-        var modalComplete = ModalComplete(taskId);
-        ClickButtonOnElement(modalComplete, "Cancelar");
     }
 
     public void EditTask(string taskTitle)
@@ -156,8 +133,13 @@ public class SharedSelectors : BasePage
         return _driver.Url;
     }
 
-    public void WaitToBeClickable(IWebElement element)
+    private IWebElement WaitToBeClickable(IWebElement element)
     {
-        _wait.Until(ExpectedConditions.ElementToBeClickable(element));
+        return _wait.Until(ExpectedConditions.ElementToBeClickable(element));
+    }
+
+    protected IWebElement WaitToBeVisible(By by)
+    {
+        return _wait.Until(ExpectedConditions.ElementIsVisible(by));
     }
 }
