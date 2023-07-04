@@ -194,7 +194,7 @@ public class HomeTests : IDisposable
         var taskTitle = _task1Pending.Title;
         var expectedLength = _totalPendingTask - 1;
 
-        _page.DeleteTask(taskTitle);
+        _page.ClickToDeleteTask(taskTitle);
         _page.ClickOkOnModalDelete(taskId);
 
         var taskCardsElements = _page.Cards();
@@ -208,7 +208,7 @@ public class HomeTests : IDisposable
         var taskTitle = _task1Pending.Title;
         var expectedUrl = $"{_serverUrl}/Task/Index";
 
-        _page.DeleteTask(taskTitle);
+        _page.ClickToDeleteTask(taskTitle);
         _page.ClickCancelOnModalDelete(taskId);
 
         var currentUrl = _page.CurrentUrl();

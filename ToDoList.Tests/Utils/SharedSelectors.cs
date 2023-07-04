@@ -97,13 +97,6 @@ public class SharedSelectors : BasePage
         button.Click();
     }
 
-    public void DeleteTask(string taskTitle)
-    {
-        var card = CardByTitle(taskTitle);
-
-        ClickButtonOnElement(card, "Excluir");
-    }
-
     public IWebElement ModalDelete(int taskId)
     {
         return _driver.FindElement(By.Id($"delete-{taskId}"));

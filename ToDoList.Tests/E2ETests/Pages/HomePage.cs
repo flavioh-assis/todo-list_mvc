@@ -37,6 +37,15 @@ public class HomePage : SharedSelectors
         return WaitToBeClickable(selector);
     }
 
+    private IWebElement ButtonDeleteOnCard(string taskTitle)
+    {
+        var selector = By.XPath(
+            $"{GetCardSelectorString(taskTitle)}{GetButtonSelectorString("Excluir")}"
+        );
+
+        return WaitToBeClickable(selector);
+    }
+
     private IWebElement ButtonEditOnCard(string taskTitle)
     {
         var selector = By.XPath(
@@ -59,6 +68,12 @@ public class HomePage : SharedSelectors
     {
         var buttonComplete = ButtonCompleteOnCard(taskTitle);
         buttonComplete.Click();
+    }
+
+    public void ClickToDeleteTask(string taskTitle)
+    {
+        var buttonDelete = ButtonDeleteOnCard(taskTitle);
+        buttonDelete.Click();
     }
 
     public void ClickToEditTask(string taskTitle)
