@@ -8,7 +8,6 @@ namespace ToDoList.App.ViewModels
         [Display(Name = "Título")]
         public string Title { get; set; }
 
-        [Required]
         [Display(Name = "Descrição")]
         public string Description { get; set; }
     }

@@ -11,10 +11,12 @@ public class TaskViewModelValidator : AbstractValidator<TaskViewModel>
             .NotNull()
             .WithMessage("Campo 'Título' não pode ser nulo.")
             .MinimumLength(3)
-            .WithMessage("Campo 'Título' deve ter no mínimo 3 caracteres.");
-        
+            .WithMessage("Campo 'Título' deve ter no mínimo 3 caracteres.")
+            .MaximumLength(20)
+            .WithMessage("Campo 'Título' deve ter no máximo 20 caracteres.");
+
         RuleFor(x => x.Description)
-            .NotNull()
-            .WithMessage("Campo 'Descrição' não pode ser nulo.");
+            .MaximumLength(100)
+            .WithMessage("Campo 'Descrição' deve ter no máximo 100 caracteres.");
     }
 }
