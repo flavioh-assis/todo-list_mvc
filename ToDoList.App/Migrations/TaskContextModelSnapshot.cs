@@ -10,47 +10,48 @@ using ToDoList.App.Data.Context;
 
 namespace ToDoList.App.Migrations
 {
-	[DbContext(typeof(TaskContext))]
-	partial class TaskContextModelSnapshot : ModelSnapshot
-	{
-		protected override void BuildModel(ModelBuilder modelBuilder)
-		{
+    [DbContext(typeof(TaskContext))]
+    partial class TaskContextModelSnapshot : ModelSnapshot
+    {
+        protected override void BuildModel(ModelBuilder modelBuilder)
+        {
 #pragma warning disable 612, 618
-			modelBuilder
-				.HasAnnotation("ProductVersion", "6.0.16")
-				.HasAnnotation("Relational:MaxIdentifierLength", 128);
+            modelBuilder
+                .HasAnnotation("ProductVersion", "6.0.16")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-			SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-			modelBuilder.Entity("ToDoList.Models.TaskModel", b =>
-				{
-					b.Property<int>("Id")
-						.ValueGeneratedOnAdd()
-						.HasColumnType("integer");
+            modelBuilder.Entity("ToDoList.App.Models.TaskModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-					SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-					b.Property<DateTime?>("CompletedAt")
-						.HasColumnType("datetime2");
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime2");
 
-					b.Property<DateTime>("CreatedAt")
-						.ValueGeneratedOnAdd()
-						.HasColumnType("datetime2")
-						.HasDefaultValueSql("GETDATE()");
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
-					b.Property<string>("Description")
-						.IsRequired()
-						.HasColumnType("varchar(100)");
+                    b.Property<string>("Description")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(100)")
+                        .HasDefaultValue("");
 
-					b.Property<string>("Title")
-						.IsRequired()
-						.HasColumnType("varchar(20)");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)");
 
-					b.HasKey("Id");
+                    b.HasKey("Id");
 
-					b.ToTable("Tasks");
-				});
+                    b.ToTable("Tasks");
+                });
 #pragma warning restore 612, 618
-		}
-	}
+        }
+    }
 }
