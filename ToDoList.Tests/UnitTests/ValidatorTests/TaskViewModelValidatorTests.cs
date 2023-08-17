@@ -1,87 +1,100 @@
-using FakeItEasy;
+using FluentAssertions;
 using FluentValidation.TestHelper;
 using ToDoList.App.Validators;
-using ToDoList.App.ViewModels;
+using ToDoList.Tests.Builders;
 using Xunit;
 
 namespace ToDoList.Tests.UnitTests.ValidatorTests;
 
 public class TaskViewModelValidatorTests
 {
-    private readonly TaskViewModelValidator _validator;
+    private readonly TaskViewModelValidator _validator = new();
 
     private const string titleNullErrorMessage = "Campo 'Título' não pode ser nulo.";
-    private const string titleLessLengthThreeErrorMessage = "Campo 'Título' deve ter no mínimo 3 caracteres.";
-    private const string descriptionNullErrorMessage = "Campo 'Descrição' não pode ser nulo.";
+    private const string titleTooSmallErrorMessage = "Campo 'Título' deve ter no mínimo 3 caracteres.";
+    private const string titleTooBigErrorMessage = "Campo 'Título' deve ter no máximo 20 caracteres.";
+    private const string descriptionTooLargeErrorMessage = "Campo 'Descrição' deve ter no máximo 100 caracteres.";
 
-    public TaskViewModelValidatorTests()
+    [Fact]
+    public void WhenModelIsValid_ShouldNotReturnErrors()
     {
-        _validator = new TaskViewModelValidator();
+        var model = new TaskViewModelBuilder()
+            .NewValidTask()
+            .Build();
+
+        var result = _validator.TestValidate(model);
+
+        result.ShouldNotHaveAnyValidationErrors();
     }
 
     [Fact]
-    public void WhenModelValid_ShouldNotReturnAnyErrors()
+    public void WhenTitleIsNull_ShouldReturnErrorWithMessage()
     {
-        var model = A.Fake<TaskViewModel>();
-        model.Title = "Title";
-        model.Description = "Description";
+        var model = new TaskViewModelBuilder()
+            .NewValidTask()
+            .WithTitleNull()
+            .Build();
 
-        var results = _validator.TestValidate(model);
+        var result = _validator.TestValidate(model);
 
-        results.ShouldNotHaveAnyValidationErrors();
-    }
-
-    [Fact]
-    public void WhenTitleNull_ShouldReturnErrorWithMessage()
-    {
-        var model = A.Fake<TaskViewModel>();
-        model.Title = null;
-        model.Description = "Description";
-
-        var results = _validator.TestValidate(model);
-
-        results.ShouldHaveValidationErrorFor(m => m.Title)
+        result.ShouldHaveValidationErrorFor(m => m.Title)
             .WithErrorMessage(titleNullErrorMessage);
     }
 
     [Fact]
-    public void WhenTitleLessThanLengthThree_ShouldReturnErrorWithMessage()
+    public void WhenTitleLengthIsLessThanThree_ShouldReturnErrorWithMessage()
     {
-        var model = A.Fake<TaskViewModel>();
-        model.Title = "Ti";
-        model.Description = "Description";
+        var model = new TaskViewModelBuilder()
+            .NewValidTask()
+            .WithTitleTooSmall()
+            .Build();
 
-        var results = _validator.TestValidate(model);
+        var result = _validator.TestValidate(model);
 
-        results.ShouldHaveValidationErrorFor(m => m.Title)
-            .WithErrorMessage(titleLessLengthThreeErrorMessage);
+        result.ShouldHaveValidationErrorFor(m => m.Title)
+            .WithErrorMessage(titleTooSmallErrorMessage);
     }
 
     [Fact]
-    public void WhenDescriptionNull_ShouldReturnErrorWithMessage()
+    public void WhenTitleLengthMoreThanTwenty_ShouldReturnErrorWithMessage()
     {
-        var model = A.Fake<TaskViewModel>();
-        model.Title = "Title";
-        model.Description = null;
+        var model = new TaskViewModelBuilder()
+            .NewValidTask()
+            .WithTitleTooLarge()
+            .Build();
 
-        var results = _validator.TestValidate(model);
+        var result = _validator.TestValidate(model);
 
-        results.ShouldHaveValidationErrorFor(m => m.Description)
-            .WithErrorMessage(descriptionNullErrorMessage);
+        result.ShouldHaveValidationErrorFor(m => m.Title)
+            .WithErrorMessage(titleTooBigErrorMessage);
     }
 
     [Fact]
-    public void WhenTitleAndDescriptionNull_ShouldReturnErrorsWithMessages()
+    public void WhenDescriptionLengthMoreThanOneHundred_ShouldReturnErrorWithMessage()
     {
-        var model = A.Fake<TaskViewModel>();
-        model.Title = null;
-        model.Description = null;
+        var model = new TaskViewModelBuilder()
+            .NewValidTask()
+            .WithDescriptionTooLarge()
+            .Build();
 
-        var results = _validator.TestValidate(model);
+        var result = _validator.TestValidate(model);
 
-        results.ShouldHaveValidationErrorFor(m => m.Title)
-            .WithErrorMessage(titleNullErrorMessage);
-        results.ShouldHaveValidationErrorFor(m => m.Description)
-            .WithErrorMessage(descriptionNullErrorMessage);
+        result.ShouldHaveValidationErrorFor(m => m.Description)
+            .WithErrorMessage(descriptionTooLargeErrorMessage);
+    }
+
+    [Fact]
+    public void WhenTitleAndDescriptionAreInvalid_ShouldReturnTwoErrors()
+    {
+        var expectedErrorsCount = 2;
+        var model = new TaskViewModelBuilder()
+            .NewValidTask()
+            .WithTitleNull()
+            .WithDescriptionTooLarge()
+            .Build();
+
+        var result = _validator.TestValidate(model);
+
+        result.Errors.Count.Should().Be(expectedErrorsCount);
     }
 }
