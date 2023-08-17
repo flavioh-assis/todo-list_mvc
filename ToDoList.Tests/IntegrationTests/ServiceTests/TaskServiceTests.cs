@@ -18,7 +18,6 @@ public class TaskServiceTests : IDisposable
 {
     private readonly TaskContext _dbContext;
     private readonly TaskService _taskService;
-    private readonly TaskViewModelBuilder _taskViewModelBuilder;
 
     private readonly TaskModel _task1Pending;
     private readonly TaskModel _task2Completed;
@@ -29,7 +28,6 @@ public class TaskServiceTests : IDisposable
     public TaskServiceTests()
     {
         var taskBuilder = new TaskModelBuilder();
-        _taskViewModelBuilder = new TaskViewModelBuilder();
 
         var server = new WebServerDriver();
         server.Start(TestDatabase);
@@ -166,9 +164,8 @@ public class TaskServiceTests : IDisposable
         var newTaskId = _totalTask + 1;
         var expectedCreatedAt = DateTime.UtcNow;
         var fiveSecondsTimeSpan = new TimeSpan(0, 0, 5);
-        var taskViewModel = _taskViewModelBuilder
-            .WithTitle("New Title")
-            .WithDescription("New description")
+        var taskViewModel = new TaskViewModelBuilder()
+            .NewValidTask()
             .Build();
 
         await _taskService.Add(taskViewModel);
@@ -186,7 +183,7 @@ public class TaskServiceTests : IDisposable
         var taskId = _task1Pending.Id;
         var newTitle = "New Title";
         var currentDescription = _task1Pending.Description;
-        var taskViewModel = _taskViewModelBuilder
+        var taskViewModel = new TaskViewModelBuilder()
             .WithTitle(newTitle)
             .WithDescription(currentDescription)
             .Build();
@@ -204,7 +201,7 @@ public class TaskServiceTests : IDisposable
         var taskId = _task1Pending.Id;
         var newDescription = "New description";
         var currentTitle = _task1Pending.Title;
-        var taskViewModel = _taskViewModelBuilder
+        var taskViewModel = new TaskViewModelBuilder()
             .WithTitle(currentTitle)
             .WithDescription(newDescription)
             .Build();
