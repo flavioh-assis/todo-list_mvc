@@ -10,3 +10,7 @@ services:
     ports:
       - "1450:1433"
     container_name: sqlserver
+    
+volumes:
+  sqlserver:
+    name: todolist
