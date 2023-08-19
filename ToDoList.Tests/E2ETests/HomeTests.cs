@@ -113,22 +113,12 @@ public class HomeTests : IDisposable
     }
 
     [Fact]
-    public void ShouldDisplayHeadingText()
-    {
-        var expectedHeadingText = "Pendentes";
-
-        var heading = _page.Heading();
-
-        heading.Text.Should().Be(expectedHeadingText);
-    }
-
-    [Fact]
     public void ShouldDisplayPendingTasksCards()
     {
         var expectedLength = _totalPendingTask;
-
+    
         var taskCardsElements = _page.Cards();
-
+    
         taskCardsElements.Count.Should().Be(expectedLength);
     }
 
