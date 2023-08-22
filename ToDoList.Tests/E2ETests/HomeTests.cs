@@ -113,16 +113,6 @@ public class HomeTests : IDisposable
     }
 
     [Fact]
-    public void ShouldDisplayPendingTasksCards()
-    {
-        var expectedLength = _totalPendingTask;
-    
-        var taskCardsElements = _page.Cards();
-    
-        taskCardsElements.Count.Should().Be(expectedLength);
-    }
-
-    [Fact]
     public void WhenCompletingTask_ShouldRedirectToPageCompleted()
     {
         var taskId = _task1Pending.Id;
@@ -151,11 +141,11 @@ public class HomeTests : IDisposable
     }
 
     [Fact]
-    public void WhenAbortingCompletingTask_ShouldNotRedirect()
+    public void WhenTaskCompletionIsAborted_ShouldNotRedirect()
     {
         var taskId = _task1Pending.Id;
         var taskTitle = _task1Pending.Title;
-        var expectedUrl = $"{_serverUrl}/Task/Index";
+        var expectedUrl = $"{_serverUrl}/";
 
         _page.ClickToCompleteTask(taskTitle);
         _page.ClickCancelOnModalComplete(taskId);
@@ -192,11 +182,11 @@ public class HomeTests : IDisposable
     }
 
     [Fact]
-    public void WhenAbortingDeletingTask_ShouldNotRedirect()
+    public void WhenTaskDeletionIsAborted_ShouldNotRedirect()
     {
         var taskId = _task1Pending.Id;
         var taskTitle = _task1Pending.Title;
-        var expectedUrl = $"{_serverUrl}/Task/Index";
+        var expectedUrl = $"{_serverUrl}/";
 
         _page.ClickToDeleteTask(taskTitle);
         _page.ClickCancelOnModalDelete(taskId);

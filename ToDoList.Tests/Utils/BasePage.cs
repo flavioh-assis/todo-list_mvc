@@ -15,6 +15,6 @@ public class BasePage
 
     public void NavigateToHome()
     {
-        _driver.Navigate().GoToUrl($"{BaseUrl}:{ServerPort}/Task/Index");
+        _driver.Navigate().GoToUrl($"{BaseUrl}:{ServerPort}");
     }
 }
