@@ -64,11 +64,6 @@ public class SharedSelectors : BasePage
         optionCreateNewTask.Click();
     }
 
-    public IWebElement Heading()
-    {
-        return WaitToBeVisible(By.TagName("h1"));
-    }
-
     public IList<IWebElement> Cards()
     {
         return _driver.FindElements(By.ClassName("card"));
