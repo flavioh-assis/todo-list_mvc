@@ -35,6 +35,7 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="systemctl --user start docker-desktop" />
     <Exec Command="docker compose up -d" />
   </Target>
 </Project>
