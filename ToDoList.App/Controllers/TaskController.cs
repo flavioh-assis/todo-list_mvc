@@ -47,6 +47,7 @@ namespace ToDoList.App.Controllers
             return RedirectToAction(nameof(Completed));
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -59,8 +60,7 @@ namespace ToDoList.App.Controllers
 
             if (!results.IsValid)
             {
-                TempData["ErrorMessage"] = results.Errors[0].ToString();
-                return RedirectToAction(nameof(Error));
+                return View(model);
             }
 
             await _taskService.Add(model);

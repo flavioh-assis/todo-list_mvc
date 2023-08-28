@@ -169,18 +169,27 @@ public class TaskControllerTests
     }
 
     [Fact]
-    public async void Create_WhenModelInvalid_ShouldRedirectToActionCreate()
+    public async void Create_WhenModelInvalid_ShouldReturnViewResult()
     {
         var invalidModel = A.Fake<TaskViewModel>();
         invalidModel.Title = "a";
         invalidModel.Description = null;
 
-        const string expectedActionName = "Error";
+        var result = await _taskController.Create(invalidModel);
+
+        result.Should().BeOfType<ViewResult>();
+    }
+
+    [Fact]
+    public async void Create_WhenModelInvalid_ShouldReturnModel()
+    {
+        var invalidModel = A.Fake<TaskViewModel>();
+        invalidModel.Title = "a";
+        invalidModel.Description = null;
 
         var result = await _taskController.Create(invalidModel);
 
-        result.Should().BeOfType<RedirectToActionResult>()
-            .Which.ActionName.Should().Be(expectedActionName);
+        result.As<ViewResult>().ViewData.Model.Should().Be(invalidModel);
     }
 
     [Fact]

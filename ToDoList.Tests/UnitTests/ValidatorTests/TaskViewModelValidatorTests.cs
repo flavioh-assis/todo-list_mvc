@@ -10,7 +10,7 @@ public class TaskViewModelValidatorTests
 {
     private readonly TaskViewModelValidator _validator = new();
 
-    private const string titleNullErrorMessage = "Campo 'Título' não pode ser nulo.";
+    private const string titleNullErrorMessage = "Campo 'Título' não pode ser vazio.";
     private const string titleTooSmallErrorMessage = "Campo 'Título' deve ter no mínimo 3 caracteres.";
     private const string titleTooBigErrorMessage = "Campo 'Título' deve ter no máximo 20 caracteres.";
     private const string descriptionTooLargeErrorMessage = "Campo 'Descrição' deve ter no máximo 100 caracteres.";
