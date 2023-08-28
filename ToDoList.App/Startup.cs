@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.App.Data.Context;
 using ToDoList.App.Repository;
@@ -5,6 +7,8 @@ using ToDoList.App.Repository.Base;
 using ToDoList.App.Repository.Interfaces;
 using ToDoList.App.Services;
 using ToDoList.App.Services.Interfaces;
+using ToDoList.App.Validators;
+using ToDoList.App.ViewModels;
 
 namespace ToDoList.App
 {
@@ -34,10 +38,15 @@ namespace ToDoList.App
             services.AddScoped<DbContext, TaskContext>();
 
             services.AddControllersWithViews();
+
+            services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+            services.AddValidatorsFromAssemblyContaining<TaskViewModelValidator>();
+            
             services.AddDbContext<TaskContext>(
                 opt => opt.UseSqlServer(ConnectionString)
             );
             services.AddScoped<ITaskContext, TaskContext>();
+            services.AddScoped<IValidator<TaskViewModel>, TaskViewModelValidator>();
             services.AddTransient<ITaskRepository, TaskRepository>();
         }
 
