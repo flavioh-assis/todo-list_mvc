@@ -8,6 +8,8 @@ public class BasePage
     private const string BaseUrl = "http://localhost";
     private const int ServerPort = 32000;
 
+    private const string NewTaskUrl = "Task/Create";
+
     protected BasePage(IWebDriver driver)
     {
         _driver = driver;
@@ -16,5 +18,10 @@ public class BasePage
     public void NavigateToHome()
     {
         _driver.Navigate().GoToUrl($"{BaseUrl}:{ServerPort}");
+    }
+    
+    public void NavigateToNewTask()
+    {
+        _driver.Navigate().GoToUrl($"{BaseUrl}:{ServerPort}/{NewTaskUrl}");
     }
 }
