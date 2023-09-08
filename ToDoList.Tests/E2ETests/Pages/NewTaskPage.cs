@@ -11,4 +11,21 @@ public class NewTaskPage : SharedSelectors
     {
         _driver = driver;
     }
+
+    public IWebElement InputTitleField()
+    {
+        return GetInputById("Title");
+    }
+
+    public void EnterTitle(string value)
+    {
+        var input = InputTitleField();
+        input.SendKeys(value);
+    }
+
+    public void ClickCreateTask()
+    {
+        var button = ButtonByText("Criar Tarefa");
+        button.Click();
+    }
 }

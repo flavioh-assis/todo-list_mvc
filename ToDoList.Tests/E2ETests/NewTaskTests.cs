@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using FluentAssertions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using ToDoList.App.Data.Context;
-using ToDoList.Tests.Builders;
 using ToDoList.Tests.Drivers;
 using ToDoList.Tests.E2ETests.Pages;
 using ToDoList.Tests.Factories;
@@ -25,8 +23,6 @@ public class NewTaskTests : IDisposable
 
     public NewTaskTests()
     {
-        var taskBuilder = new TaskModelBuilder();
-
         _server = new WebServerDriver();
         _server.Start(TestDatabase);
         _serverUrl = $"{_server.BaseUrl}:{_server.Port}";
@@ -53,8 +49,25 @@ public class NewTaskTests : IDisposable
     }
 
     [Fact]
-    public void Test()
+    public void ShouldRedirectToHomePage_WhenEnterValidTitle()
     {
+        var expectedUrl = $"{_serverUrl}/";
+        
+        _page.EnterTitle("Task Title");
+        _page.ClickCreateTask();
+        
+        _page.CurrentUrl().Should().Be(expectedUrl);
+    }
+
+    [Fact]
+    public void ShouldNotRedirectToHomePage_WhenEnterInvalidTitle()
+    {
+        var expectedUrl = _page.CurrentUrl();
+
+        _page.EnterTitle("");
+        _page.ClickCreateTask();
+        
+        _page.CurrentUrl().Should().Be(expectedUrl);
     }
 
     public void Dispose()

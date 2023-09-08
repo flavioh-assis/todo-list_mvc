@@ -73,4 +73,16 @@ public class SharedSelectors : BasePage
     {
         return _driver.Url;
     }
+
+    public IWebElement GetInputById(string id)
+    {
+        var by = By.XPath($"//input[@id='{id}']");
+        return WaitToBeVisible(by);
+    }
+
+    public IWebElement ButtonByText(string buttonText)
+    {
+        var by = By.XPath($"//button[contains(text(), '{buttonText}')]");
+        return WaitToBeClickable(by);
+    }
 }
