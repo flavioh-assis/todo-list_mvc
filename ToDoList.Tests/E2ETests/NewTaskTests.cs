@@ -1,7 +1,6 @@
 using System;
 using FluentAssertions;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using ToDoList.App.Data.Context;
 using ToDoList.Tests.Drivers;
 using ToDoList.Tests.E2ETests.Pages;
@@ -13,7 +12,7 @@ namespace ToDoList.Tests.E2ETests;
 
 public class NewTaskTests : IDisposable
 {
-    private readonly IWebDriver _driver;
+    private readonly IWebDriver? _driver;
     private readonly TaskContext _dbContext;
     private readonly WebServerDriver _server;
     private readonly NewTaskPage _page;
@@ -37,12 +36,7 @@ public class NewTaskTests : IDisposable
             throw new Exception("Failed to connect to database.");
         }
 
-        var options = new ChromeOptions
-        {
-            AcceptInsecureCertificates = true,
-        };
-        // options.AddArgument("--headless=new");
-        _driver = new ChromeDriver(options);
+        _driver = new ChromeDriverFactory().CreateWebDriver();
 
         _page = new NewTaskPage(_driver);
         _page.NavigateToNewTask();
@@ -52,10 +46,10 @@ public class NewTaskTests : IDisposable
     public void ShouldRedirectToHomePage_WhenEnterValidTitle()
     {
         var expectedUrl = $"{_serverUrl}/";
-        
+
         _page.EnterTitle("Task Title");
         _page.ClickCreateTask();
-        
+
         _page.CurrentUrl().Should().Be(expectedUrl);
     }
 
@@ -66,13 +60,12 @@ public class NewTaskTests : IDisposable
 
         _page.EnterTitle("");
         _page.ClickCreateTask();
-        
+
         _page.CurrentUrl().Should().Be(expectedUrl);
     }
 
     public void Dispose()
     {
-        _driver?.Quit();
         _driver?.Dispose();
 
         DbHelper.Dispose(_dbContext);

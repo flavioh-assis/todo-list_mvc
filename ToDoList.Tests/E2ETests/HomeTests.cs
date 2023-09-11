@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using ToDoList.App.Data.Context;
 using ToDoList.App.Models;
 using ToDoList.Tests.Builders;
@@ -16,7 +15,7 @@ namespace ToDoList.Tests.E2ETests;
 
 public class HomeTests : IDisposable
 {
-    private readonly IWebDriver _driver;
+    private readonly IWebDriver? _driver;
     private readonly TaskContext _dbContext;
     private readonly WebServerDriver _server;
     private readonly HomePage _page;
@@ -68,12 +67,7 @@ public class HomeTests : IDisposable
 
         _totalPendingTask = pendingTasks.Count;
 
-        var options = new ChromeOptions
-        {
-            AcceptInsecureCertificates = true,
-        };
-        // options.AddArgument("--headless=new");
-        _driver = new ChromeDriver(options);
+        _driver = new ChromeDriverFactory().CreateWebDriver();
 
         _page = new HomePage(_driver);
         _page.NavigateToHome();
@@ -197,7 +191,6 @@ public class HomeTests : IDisposable
 
     public void Dispose()
     {
-        _driver?.Quit();
         _driver?.Dispose();
 
         DbHelper.Dispose(_dbContext);
