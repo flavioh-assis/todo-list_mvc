@@ -1,6 +1,6 @@
 ﻿$(document).ready(function() {
 	$("#cancelButton").click(function() {
-		Redirect("/Task/Index");
+		Redirect("/");
 	});
 });
 

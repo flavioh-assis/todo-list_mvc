@@ -26,6 +26,7 @@ public class HomeTests : IDisposable
     private readonly int _totalPendingTask;
 
     private const string TestDatabase = "db_e2e_home_tests";
+    private const bool Headless = true;
 
     public HomeTests()
     {
@@ -67,7 +68,7 @@ public class HomeTests : IDisposable
 
         _totalPendingTask = pendingTasks.Count;
 
-        _driver = new ChromeDriverFactory().CreateWebDriver();
+        _driver = new ChromeDriverFactory().CreateWebDriver(Headless);
 
         _page = new HomePage(_driver);
         _page.NavigateToHome();

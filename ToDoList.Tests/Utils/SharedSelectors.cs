@@ -9,7 +9,7 @@ namespace ToDoList.Tests.Utils;
 public class SharedSelectors : BasePage
 {
     private readonly IWebDriver _driver;
-    private const int WaitTimeInSeconds = 10;
+    private const int WaitTimeInSeconds = 5;
     private readonly WebDriverWait _wait;
 
     protected SharedSelectors(IWebDriver driver) : base(driver)
@@ -84,5 +84,10 @@ public class SharedSelectors : BasePage
     {
         var by = By.XPath($"//button[contains(text(), '{buttonText}')]");
         return WaitToBeClickable(by);
+    }
+
+    public void WaitUrlToChange(string currentUrl)
+    {
+        _wait.Until(driver => !string.Equals(driver.Url, currentUrl));
     }
 }

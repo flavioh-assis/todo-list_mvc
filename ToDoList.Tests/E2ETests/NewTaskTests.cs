@@ -19,6 +19,7 @@ public class NewTaskTests : IDisposable
     private readonly string _serverUrl;
 
     private const string TestDatabase = "db_e2e_new_task_tests";
+    private const bool Headless = true;
 
     public NewTaskTests()
     {
@@ -36,7 +37,7 @@ public class NewTaskTests : IDisposable
             throw new Exception("Failed to connect to database.");
         }
 
-        _driver = new ChromeDriverFactory().CreateWebDriver();
+        _driver = new ChromeDriverFactory().CreateWebDriver(Headless);
 
         _page = new NewTaskPage(_driver);
         _page.NavigateToNewTask();
@@ -45,10 +46,24 @@ public class NewTaskTests : IDisposable
     [Fact]
     public void ShouldRedirectToHomePage_WhenEnterValidTitle()
     {
+        var currentUrl = _page.CurrentUrl();
         var expectedUrl = $"{_serverUrl}/";
 
         _page.EnterTitle("Task Title");
         _page.ClickCreateTask();
+        _page.WaitUrlToChange(currentUrl);
+
+        _page.CurrentUrl().Should().Be(expectedUrl);
+    }
+
+    [Fact]
+    public void ShouldRedirectToHomePage_WhenClickOnCancel()
+    {
+        var currentUrl = _page.CurrentUrl();
+        var expectedUrl = $"{_serverUrl}/";
+
+        _page.ClickCancel();
+        _page.WaitUrlToChange(currentUrl);
 
         _page.CurrentUrl().Should().Be(expectedUrl);
     }

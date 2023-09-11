@@ -28,4 +28,10 @@ public class NewTaskPage : SharedSelectors
         var button = ButtonByText("Criar Tarefa");
         button.Click();
     }
+
+    public void ClickCancel()
+    {
+        var button = ButtonByText("Cancelar");
+        button.Click();
+    }
 }
