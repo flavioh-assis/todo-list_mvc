@@ -29,8 +29,7 @@ public class TaskServiceTests : IDisposable
     {
         var taskBuilder = new TaskModelBuilder();
 
-        var server = new WebServerDriver();
-        server.Start(TestDatabase);
+        var server = new WebServerDriver(TestDatabase);
 
         _dbContext = new TaskContextFactory()
             .CreateDbContext(new[] { server.TestConnectionString });

@@ -23,8 +23,7 @@ public class NewTaskTests : IDisposable
 
     public NewTaskTests()
     {
-        _server = new WebServerDriver();
-        _server.Start(TestDatabase);
+        _server = new WebServerDriver(TestDatabase);
         _serverUrl = $"{_server.BaseUrl}:{_server.Port}";
 
         _dbContext = new TaskContextFactory()

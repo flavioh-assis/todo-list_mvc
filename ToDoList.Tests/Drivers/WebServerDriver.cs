@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using ToDoList.App;
 
 namespace ToDoList.Tests.Drivers;
@@ -14,11 +13,13 @@ public class WebServerDriver
     public string BaseUrl { get; }
     public string TestConnectionString { get; private set; }
 
-    public WebServerDriver()
+    public WebServerDriver(string testDatabase)
     {
         BaseUrl = "http://localhost";
         Port = 32000;
         TestConnectionString = "";
+
+        Start(testDatabase);
     }
 
     public void Start(string testDatabase)
