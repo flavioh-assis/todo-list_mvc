@@ -44,4 +44,10 @@ public abstract class DbHelper
         tasks.ForEach(task => dbContext.Add(task));
         await dbContext.SaveChangesAsync();
     }
+    
+    public static async Task InsertTask(DbContext dbContext, TaskModel task)
+    {
+        dbContext.Add(task);
+        await dbContext.SaveChangesAsync();
+    }
 }

@@ -8,20 +8,34 @@ public class BasePage
     private const string BaseUrl = "http://localhost";
     private const int ServerPort = 32000;
 
-    private const string NewTaskUrl = "Task/Create";
+    private const string HomeUrl = "/";
+    private const string NewTaskUrl = "/Task/Create";
+    private const string EditTaskUrl = "/Task/Edit";
 
     protected BasePage(IWebDriver driver)
     {
         _driver = driver;
     }
 
+    private void NavigateTo(string url)
+    {
+        _driver.Navigate().GoToUrl(
+            $"{BaseUrl}:{ServerPort}{url}"
+        );
+    }
+
     public void NavigateToHome()
     {
-        _driver.Navigate().GoToUrl($"{BaseUrl}:{ServerPort}");
+        NavigateTo(HomeUrl);
     }
-    
+
     public void NavigateToNewTask()
     {
-        _driver.Navigate().GoToUrl($"{BaseUrl}:{ServerPort}/{NewTaskUrl}");
+        NavigateTo(NewTaskUrl);
+    }
+
+    public void NavigateToEditTask(int taskId)
+    {
+        NavigateTo($"{EditTaskUrl}/{taskId}");
     }
 }
